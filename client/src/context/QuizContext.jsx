@@ -1,9 +1,10 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { questions as QUESTIONS, classifyArchetype } from '../data/questions.js';
+import { SESSION_QUESTIONS as QUESTIONS, classifyArchetype } from '../data/questions.js';
 
 const QuizContext = createContext(null);
 
 const INITIAL_SCORES = { sage: 0, builder: 0, creator: 0, connector: 0, hunter: 0 };
+const EMPTY_PROFILE  = { age: '', occupation: '', experience: '', hours: '' };
 
 export function QuizProvider({ children }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -14,6 +15,8 @@ export function QuizProvider({ children }) {
   const [userName, setUserName]         = useState('');
   const [email, setEmail]               = useState('');
   const [plan, setPlan]                 = useState(null);
+  const [profile, setProfile]           = useState({ ...EMPTY_PROFILE });
+  const [openAnswers, setOpenAnswers]   = useState([]);
   const [completed, setCompleted]       = useState(false);
 
   const totalQuestions = QUESTIONS.length;
@@ -35,6 +38,10 @@ export function QuizProvider({ children }) {
     setCurrentIndex(prev => prev + 1);
   }, []);
 
+  const addOpenAnswer = useCallback((question, answer) => {
+    setOpenAnswers(prev => [...prev, { question, answer }]);
+  }, []);
+
   const goBack = useCallback(() => {
     setCurrentIndex(prev => {
       if (prev === 0) return 0;
@@ -52,12 +59,25 @@ export function QuizProvider({ children }) {
     });
   }, []);
 
+  // Question/answer pairs in readable text, for the report prompt
+  const answerTexts = useCallback((lang = 'he') => {
+    return QUESTIONS
+      .filter(q => answers[q.id])
+      .map(q => {
+        const block = q[lang] ?? q.he;
+        const opt = block.options.find(o => o.type === answers[q.id]);
+        return opt ? { question: block.text, answer: opt.text } : null;
+      })
+      .filter(Boolean);
+  }, [answers]);
+
   function reset() {
     setCurrentIndex(0);
     setAnswers({});
     setScores({ ...INITIAL_SCORES });
     setArchetype(null);
     setSessionId(null);
+    setOpenAnswers([]);
     setCompleted(false);
   }
 
@@ -68,6 +88,9 @@ export function QuizProvider({ children }) {
       userName, setUserName,
       email, setEmail,
       plan, setPlan,
+      profile, setProfile,
+      openAnswers, addOpenAnswer,
+      answerTexts,
       completed,
       answerQuestion, goBack, reset,
     }}>

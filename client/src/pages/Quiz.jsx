@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext.jsx';
 import { useQuiz } from '../context/QuizContext.jsx';
 import { T } from '../data/translations.js';
-import { STAGE_LABELS } from '../data/questions.js';
+import { STAGE_LABELS, OPEN_QUESTION_AT } from '../data/questions.js';
+import OpenQuestion from '../components/OpenQuestion.jsx';
 import ProgressBar from '../components/ui/ProgressBar.jsx';
 
 export default function Quiz() {
@@ -15,6 +16,7 @@ export default function Quiz() {
     completed, archetype, scores, answers,
     sessionId, setSessionId, userName,
     answerQuestion, goBack,
+    profile, openAnswers, addOpenAnswer, answerTexts,
   } = useQuiz();
   const s = T[language];
 
@@ -83,6 +85,10 @@ export default function Quiz() {
     }, 240);
   }
 
+  // An open question is due when we reach a checkpoint that hasn't been answered yet
+  const openIndex = OPEN_QUESTION_AT.indexOf(currentIndex);
+  const openDue = openIndex !== -1 && openAnswers.length === openIndex;
+
   if (!currentQuestion) return null;
 
   const q = currentQuestion[language];
@@ -117,6 +123,16 @@ export default function Quiz() {
       {/* Scrollable question area — scroll happens inside this div, not the page */}
       <div ref={scrollAreaRef} style={{ flex: 1, overflowY: 'auto', overflowAnchor: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 24px 60px' }}>
         <div style={{ width: '100%', maxWidth: 720 }}>
+          {openDue ? (
+            <OpenQuestion
+              key={`open-${openIndex}`}
+              index={openIndex}
+              language={language}
+              profile={profile}
+              answerTexts={answerTexts(language)}
+              onSubmit={(question, answer) => addOpenAnswer(question, answer)}
+            />
+          ) : (
           <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}
@@ -199,8 +215,9 @@ export default function Quiz() {
               </div>
             </motion.div>
           </AnimatePresence>
+          )}
 
-          {currentIndex > 0 && selectedIndex === null && (
+          {currentIndex > 0 && selectedIndex === null && !openDue && (
             <div style={{ marginTop: '20px', textAlign: language === 'he' ? 'right' : 'left' }}>
               <button
                 type="button"

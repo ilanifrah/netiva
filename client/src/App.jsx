@@ -10,6 +10,7 @@ import Quiz           from './pages/Quiz.jsx';
 import Results        from './pages/Results.jsx';
 import Report         from './pages/Report.jsx';
 import AiQuiz from './pages/AiQuiz.jsx';
+import Profile        from './pages/Profile.jsx';
 
 function AppRoutes() {
   const { language } = useLanguage();
@@ -24,6 +25,7 @@ function AppRoutes() {
       <Route path="/"                    element={<Landing />} />
       <Route path="/intake"              element={<Intake />} />
       <Route path="/plan"                element={<Plan />} />
+      <Route path="/profile"           element={<Profile />} />
       <Route path="/quiz"                element={<Quiz />} />
       <Route path="/results"             element={<Results />} />
       <Route path="/report/:sessionId"   element={<Report />} />

@@ -1071,3 +1071,19 @@ export function classifyArchetype(scores) {
   }
   return first[0];
 }
+
+// ── Session subset ─────────────────────────────────────────────
+// 48 questions per session (decided May 2026): all of stages 1–4,
+// and the first 8 of stages 5 and 6. Closed answers are scored
+// locally, so the questionnaire stays fast.
+export const SESSION_QUESTIONS = (() => {
+  const perStage = {};
+  return questions.filter(q => {
+    perStage[q.stage] = (perStage[q.stage] ?? 0) + 1;
+    return perStage[q.stage] <= 8;
+  });
+})();
+
+// Points (by number of answered closed questions) where one
+// AI-written open question is inserted — roughly 40% and 75%.
+export const OPEN_QUESTION_AT = [19, 36];

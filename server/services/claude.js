@@ -1,12 +1,44 @@
 import Anthropic from '@anthropic-ai/sdk';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-const MODEL = 'claude-sonnet-4-6';
+const MODEL = 'claude-sonnet-5-5';
 
 function formatIncomePaths(paths) {
   return paths.map((p, i) =>
     `${i + 1}. ${p.name}\n   למה מתאים: ${p.why}\n   זמן לכסף ראשון: ${p.timeToFirstIncome}\n   פעולה ראשונה: ${p.firstAction}`
   ).join('\n\n');
+}
+
+// Everything we know about this specific person, plus the rules that keep
+// the report concrete. Appended to the base prompt for every plan.
+function buildPersonalBlock({ profile, qa, openAnswers }) {
+  const p = profile || {};
+  const qaLines = (qa || [])
+    .map((x, i) => `${i + 1}. ${String(x.question).slice(0, 220)} → ${String(x.answer).slice(0, 220)}`)
+    .join('\n');
+  const openLines = (openAnswers || [])
+    .map((x, i) => `שאלה פתוחה ${i + 1}: ${String(x.question).slice(0, 300)}\nתשובה: ${String(x.answer).slice(0, 1200)}`)
+    .join('\n\n');
+
+  return `
+פרופיל המשתמש:
+• גיל: ${p.age || 'לא צוין'}
+• עיסוק היום: ${p.occupation || 'לא צוין'}
+• ניסיון או כישרון שכבר שילמו לו עליו: ${p.experience || 'לא צוין'}
+• שעות פנויות בשבוע: ${p.hours || 'לא צוין'}
+
+התשובות שלו בשאלון (שאלה → הבחירה שלו):
+${qaLines || 'לא נשלחו'}
+
+${openLines ? `התשובות הפתוחות שלו (במילים שלו):\n${openLines}` : ''}
+
+כללי דיוק — גוברים על כל הוראה אחרת בהמשך:
+1. פתח את הדוח בסעיף "## הכיוון שלך", לפני כל שאר הכותרות. בסעיף הזה: מקצוע, תפקיד או מסלול הכנסה אחד בשם מפורש ומעשי (לדוגמה: "עורך וידאו לעסקים קטנים", "בונה אוטומציות AI למשרדים", "מדריך סדנאות זום בתחום X"), ולא שם הארכיטיפ.
+2. נמק את הכיוון בשלוש תשובות ספציפיות שלו מהרשימה למעלה. צטט את המילים שלו.
+3. התאם לגיל, לעיסוק, לניסיון ולשעות הפנויות. אם יש לו עד 5 שעות בשבוע, אל תציע מסלול שדורש 30. אם יש לו ניסיון שכבר שילמו לו עליו — התחל ממנו.
+4. הצג את הכיוון כהשערה שבודקים, לא כקביעה: סיים את הסעיף ב"בדיקה לשבוע הקרוב" — פעולה אחת זולה שתוך 7 ימים תראה אם הכיוון נכון.
+5. אסור: משפטי מוטיבציה, "אתה אדם ייחודי ומורכב", חזרה על אותו רעיון בניסוחים שונים, הבטחות הכנסה.
+6. עברית טבעית ויומיומית, לא תרגום מאנגלית.`;
 }
 
 function buildHebrewPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock }) {
@@ -230,7 +262,7 @@ ${nameRef}[3–4 sentences. Core psychological pattern and how it shows up in on
 [One sentence. One action doable today. The most important sentence in this report.]`;
 }
 
-function buildPrompt({ plan, archetype, scores, language, name }) {
+function buildPrompt({ plan, archetype, scores, language, name, profile, qa, openAnswers }) {
   const isHe = language === 'he';
   const archetypeName = isHe ? archetype.name_he : archetype.name_en;
   const tagline       = isHe ? archetype.tagline_he : archetype.tagline_en;
@@ -245,13 +277,14 @@ function buildPrompt({ plan, archetype, scores, language, name }) {
     : '';
 
   if (isHe) {
-    return buildHebrewPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock });
+    const personal = buildPersonalBlock({ profile, qa, openAnswers });
+    return buildHebrewPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock: incomePathsBlock + '\n' + personal });
   }
   return buildEnglishPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock });
 }
 
-export async function generateReport({ plan, archetype, scores, language, name }) {
-  const prompt = buildPrompt({ plan, archetype, scores, language, name });
+export async function generateReport({ plan, archetype, scores, language, name, profile, qa, openAnswers }) {
+  const prompt = buildPrompt({ plan, archetype, scores, language, name, profile, qa, openAnswers });
 
   const maxTokens = plan === 'premium' ? 4000 : plan === 'advanced' ? 2500 : 1200;
 

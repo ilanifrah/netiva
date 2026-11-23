@@ -77,7 +77,7 @@ export default function Results() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const { language } = useLanguage();
-  const { archetype, sessionId, scores, userName, email, answers, plan } = useQuiz();
+  const { archetype, sessionId, scores, userName, email, answers, plan, profile, openAnswers, answerTexts } = useQuiz();
   const s = T[language];
 
   const [revealed, setRevealed]     = useState(false);
@@ -122,6 +122,9 @@ export default function Results() {
           plan:      plan || 'advanced',
           name:      userName || null,
           sessionId: sid || null,
+          profile:     profile || null,
+          qa:          answerTexts('he'),
+          openAnswers: openAnswers || [],
         }),
       });
       const data = await res.json();

@@ -55,7 +55,7 @@ router.post('/next-question', async (req, res) => {
 ${history.map((h, i) => `שאלה ${i+1}: ${h.question}\nתשובה: ${h.answer}`).join('\n\n')}
 
 שאלות זמינות במאגר:
-${availableQuestions.map(q => `ID: ${q.id} | ממד: ${q.dimension} | טקסט: ${q.text}`).join('\n')}
+${availableQuestions.map(q => `ID: ${q.id} | שלב: ${q.stage ?? ''} | טקסט: ${q.he?.text ?? q.text}`).join('\n')}
 
 ${questionCount >= 20 ? 'ניתן להסיק מסקנה אם הביטחון גבוה' : `צריך עוד ${20 - questionCount} שאלות לפחות`}
 
@@ -63,7 +63,7 @@ ${questionCount >= 20 ? 'ניתן להסיק מסקנה אם הביטחון גב
 `;
 
     const response = await client.messages.create({
-      model: 'claude-sonnet-4-5',
+      model: 'claude-sonnet-5-5',
       max_tokens: 1024,
       system: DIAGNOSTIC_SYSTEM_PROMPT,
       messages: [{ role: 'user', content: userMessage }]
@@ -82,6 +82,51 @@ ${questionCount >= 20 ? 'ניתן להסיק מסקנה אם הביטחון גב
   } catch (err) {
     console.error('[diagnostic/next-question]', err);
     res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/diagnostic/open-question
+// One short open question, written from the profile and the closed answers so far.
+router.post('/open-question', async (req, res) => {
+  try {
+    const { index = 0, language = 'he', profile = {}, answers = [] } = req.body || {};
+    const isHe = language !== 'en';
+    const recent = (Array.isArray(answers) ? answers : []).slice(-20)
+      .map((a, i) => `${i + 1}. ${String(a.question).slice(0, 200)} → ${String(a.answer).slice(0, 200)}`)
+      .join('\n');
+    const focus = index === 0
+      ? (isHe ? 'מה מניע אותו באמת בעבודה, ואיפה התשובות שלו לא עקביות' : 'what really drives them at work, and where their answers are inconsistent')
+      : (isHe ? 'מה עוצר אותו מכסף (הצל), ומה הוא מוכן לשנות בפועל' : 'what holds them back from money (the shadow), and what they will actually change');
+
+    const prompt = isHe
+      ? `אתה כותב שאלה פתוחה אחת לשאלון אבחון שמכוון אנשים למסלול הכנסה.
+פרופיל: גיל ${profile.age || 'לא צוין'}, עיסוק: ${profile.occupation || 'לא צוין'}, ניסיון: ${profile.experience || 'לא צוין'}, שעות פנויות: ${profile.hours || 'לא צוין'}.
+תשובות אחרונות:
+${recent || 'אין עדיין'}
+
+כתוב שאלה פתוחה אחת בלבד, שמטרתה לחשוף ${focus}.
+כללים: עברית טבעית בגוף שני זכר, עד 25 מילים, על חוויה קונקרטית ("ספר על פעם ש..."), בלי מילים מקצועיות, שאלה אחת ולא שתיים.
+החזר רק את השאלה עצמה, בלי מירכאות ובלי הקדמה.`
+      : `Write one open question for a diagnostic that points people to an income path.
+Profile: age ${profile.age || 'n/a'}, occupation: ${profile.occupation || 'n/a'}, experience: ${profile.experience || 'n/a'}, hours: ${profile.hours || 'n/a'}.
+Recent answers:
+${recent || 'none yet'}
+
+Write exactly one open question that reveals ${focus}.
+Rules: natural second person, max 25 words, about a concrete experience ("Tell me about a time..."), no jargon, one question only.
+Return only the question.`;
+
+    const response = await client.messages.create({
+      model: 'claude-haiku-5-5',
+      max_tokens: 120,
+      messages: [{ role: 'user', content: prompt }],
+    });
+    const question = (response.content?.[0]?.text || '').trim().replace(/^["'״]+|["'״]+$/g, '');
+    if (!question) return res.status(502).json({ error: 'empty' });
+    res.json({ question });
+  } catch (err) {
+    console.error('[diagnostic/open-question]', err.message);
+    res.status(500).json({ error: 'failed' });
   }
 });
 
@@ -108,7 +153,7 @@ ${answers.map((a, i) => `${i+1}. ש: ${a.question}\nת: ${a.answer}`).join('\n\n
 `;
 
     const response = await client.messages.create({
-      model: 'claude-sonnet-4-5',
+      model: 'claude-sonnet-5-5',
       max_tokens: 2000,
       messages: [{ role: 'user', content: prompt }]
     });
