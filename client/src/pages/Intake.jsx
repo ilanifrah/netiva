@@ -168,6 +168,10 @@ export default function Intake() {
               {s.intakeSubmit}
             </Button>
           </form>
+          <p style={{ marginTop: '14px', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            {isRtl ? 'בהמשך אתה מסכים ל' : 'By continuing you agree to the '}
+            <a href="/privacy" style={{ color: 'var(--violet-400)' }}>{isRtl ? 'תנאי השימוש והפרטיות' : 'terms & privacy'}</a>
+          </p>
         </div>
       </motion.div>
     </div>

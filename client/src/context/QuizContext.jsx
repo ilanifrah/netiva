@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { SESSION_QUESTIONS as QUESTIONS, classifyArchetype } from '../data/questions.js';
+import { SESSION_QUESTIONS as QUESTIONS, classifyArchetype, STAGE_LABELS, layerProfile } from '../data/questions.js';
 
 const QuizContext = createContext(null);
 
@@ -66,9 +66,15 @@ export function QuizProvider({ children }) {
       .map(q => {
         const block = q[lang] ?? q.he;
         const opt = block.options.find(o => o.type === answers[q.id]);
-        return opt ? { question: block.text, answer: opt.text } : null;
+        const layer = (STAGE_LABELS[lang] ?? STAGE_LABELS.he)[q.stage];
+        return opt ? { layer, question: block.text, answer: opt.text, type: opt.type } : null;
       })
       .filter(Boolean);
+  }, [answers]);
+
+  // Top type per layer, with the layer name in the given language
+  const layers = useCallback((lang = 'he') => {
+    return layerProfile(answers).map(l => ({ ...l, layer: (STAGE_LABELS[lang] ?? STAGE_LABELS.he)[l.stage] }));
   }, [answers]);
 
   function reset() {
@@ -90,7 +96,7 @@ export function QuizProvider({ children }) {
       plan, setPlan,
       profile, setProfile,
       openAnswers, addOpenAnswer,
-      answerTexts,
+      answerTexts, layers,
       completed,
       answerQuestion, goBack, reset,
     }}>

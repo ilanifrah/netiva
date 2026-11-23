@@ -10,35 +10,78 @@ function formatIncomePaths(paths) {
 }
 
 // Everything we know about this specific person, plus the rules that keep
-// the report concrete. Appended to the base prompt for every plan.
-function buildPersonalBlock({ profile, qa, openAnswers }) {
+// the report concrete and honest. Appended to the base prompt for every plan.
+const TYPE_NAMES = {
+  he: { sage: 'החכם', builder: 'הבונה', creator: 'היוצר', connector: 'המחבר', hunter: 'הציד' },
+  en: { sage: 'Sage', builder: 'Builder', creator: 'Creator', connector: 'Connector', hunter: 'Hunter' },
+};
+
+function buildPersonalBlock({ profile, qa, openAnswers, layers, language }) {
+  const he = language !== 'en';
+  const names = he ? TYPE_NAMES.he : TYPE_NAMES.en;
   const p = profile || {};
+  const na = he ? 'לא צוין' : 'not given';
   const qaLines = (qa || [])
-    .map((x, i) => `${i + 1}. ${String(x.question).slice(0, 220)} → ${String(x.answer).slice(0, 220)}`)
+    .map((x, i) => `${i + 1}. [${x.layer || ''}] ${String(x.question).slice(0, 220)} → ${String(x.answer).slice(0, 220)}`)
     .join('\n');
   const openLines = (openAnswers || [])
-    .map((x, i) => `שאלה פתוחה ${i + 1}: ${String(x.question).slice(0, 300)}\nתשובה: ${String(x.answer).slice(0, 1200)}`)
+    .map((x, i) => he
+      ? `שאלה פתוחה ${i + 1}: ${String(x.question).slice(0, 300)}\nתשובה: ${String(x.answer).slice(0, 1200)}`
+      : `Open question ${i + 1}: ${String(x.question).slice(0, 300)}\nAnswer: ${String(x.answer).slice(0, 1200)}`)
     .join('\n\n');
+  const layerLines = (layers || [])
+    .map(l => `• ${l.layer}: ${names[l.top] || l.top} (${l.strength}/8)`)
+    .join('\n');
 
-  return `
+  if (he) return `
 פרופיל המשתמש:
-• גיל: ${p.age || 'לא צוין'}
-• עיסוק היום: ${p.occupation || 'לא צוין'}
-• ניסיון או כישרון שכבר שילמו לו עליו: ${p.experience || 'לא צוין'}
-• שעות פנויות בשבוע: ${p.hours || 'לא צוין'}
+• גיל: ${p.age || na}
+• עיסוק היום: ${p.occupation || na}
+• ניסיון או כישרון שכבר שילמו לו עליו: ${p.experience || na}
+• שעות פנויות בשבוע: ${p.hours || na}
 
-התשובות שלו בשאלון (שאלה → הבחירה שלו):
+השאלון בנוי משש שכבות, כל אחת ניגשת מזווית אחרת: זרימה, הגוף, זיכרון מוקדם, הצל, האדם בין אנשים, ובחירה תחת אילוץ.
+הטיפוס החזק בכל שכבה:
+${layerLines || 'לא נשלח'}
+
+התשובות שלו (בסוגריים: השכבה):
 ${qaLines || 'לא נשלחו'}
 
-${openLines ? `התשובות הפתוחות שלו (במילים שלו):\n${openLines}` : ''}
+${openLines ? `התשובות הפתוחות שלו, במילים שלו:\n${openLines}` : ''}
 
 כללי דיוק — גוברים על כל הוראה אחרת בהמשך:
-1. פתח את הדוח בסעיף "## הכיוון שלך", לפני כל שאר הכותרות. בסעיף הזה: מקצוע, תפקיד או מסלול הכנסה אחד בשם מפורש ומעשי (לדוגמה: "עורך וידאו לעסקים קטנים", "בונה אוטומציות AI למשרדים", "מדריך סדנאות זום בתחום X"), ולא שם הארכיטיפ.
-2. נמק את הכיוון בשלוש תשובות ספציפיות שלו מהרשימה למעלה. צטט את המילים שלו.
-3. התאם לגיל, לעיסוק, לניסיון ולשעות הפנויות. אם יש לו עד 5 שעות בשבוע, אל תציע מסלול שדורש 30. אם יש לו ניסיון שכבר שילמו לו עליו — התחל ממנו.
-4. הצג את הכיוון כהשערה שבודקים, לא כקביעה: סיים את הסעיף ב"בדיקה לשבוע הקרוב" — פעולה אחת זולה שתוך 7 ימים תראה אם הכיוון נכון.
-5. אסור: משפטי מוטיבציה, "אתה אדם ייחודי ומורכב", חזרה על אותו רעיון בניסוחים שונים, הבטחות הכנסה.
-6. עברית טבעית ויומיומית, לא תרגום מאנגלית.`;
+1. פתח את הדוח בסעיף "## הכיוון שלך", לפני כל שאר הכותרות. בו: מקצוע, תפקיד או מסלול הכנסה אחד בשם מפורש ומעשי (לדוגמה: "עורך וידאו לעסקים קטנים", "בונה אוטומציות AI למשרדים"), ולא שם הארכיטיפ.
+2. נמק את הכיוון בשלוש תשובות ספציפיות שלו מהרשימה. צטט את המילים שלו.
+3. מיד אחריו כתוב סעיף "## הצמתים שלך": בחר שתי שכבות שבהן הטיפוס החזק שונה (למשל, בזרימה הוא יוצר אבל בצל הוא ציד). הסבר מה הפער אומר עליו, במשפטים קונקרטיים, ואיך הוא משפיע על הכיוון. אם כל השכבות מסכימות, אמור זאת וכתוב מה זה מחזק.
+4. התאם לגיל, לעיסוק, לניסיון ולשעות הפנויות. עם עד 5 שעות בשבוע, אל תציע מסלול שדורש 30. אם יש ניסיון שכבר שילמו עליו, התחל ממנו.
+5. הצג את הכיוון כהשערה לבדיקה: סיים את הסעיף הראשון ב"בדיקה לשבוע הקרוב", פעולה אחת זולה שתוך 7 ימים תראה אם הכיוון נכון.
+6. אסור: משפטים שמתאימים לכל אדם ("לפעמים אתה מטיל ספק בעצמך"), משפטי מוטיבציה, "אתה אדם ייחודי ומורכב", חזרה על רעיון, הבטחות הכנסה. כל משפט צריך להישען על תשובה שלו.
+7. עברית טבעית ויומיומית בגוף שני זכר, לא תרגום.`;
+
+  return `
+User profile:
+• Age: ${p.age || na}
+• Current occupation: ${p.occupation || na}
+• Experience people have already paid for: ${p.experience || na}
+• Free hours per week: ${p.hours || na}
+
+The questionnaire has six layers, each from a different angle: flow, the body, early memory, the shadow, the person among others, and choice under constraint.
+Strongest type per layer:
+${layerLines || 'not sent'}
+
+Their answers (layer in brackets):
+${qaLines || 'not sent'}
+
+${openLines ? `Their open answers, in their own words:\n${openLines}` : ''}
+
+Accuracy rules — these override any instruction that follows:
+1. Open the report with a "## Your direction" section, before all other headings: one named, practical profession, role or income path (e.g. "video editor for small businesses", "AI automation builder for offices"), not the archetype name.
+2. Back it with three of their specific answers. Quote their words.
+3. Right after it write "## Your junctions": pick two layers whose strongest type differs (e.g. Creator in flow but Hunter in the shadow). Explain concretely what the gap says about them and how it shapes the direction. If all layers agree, say so and what that strengthens.
+4. Fit the age, occupation, experience and free hours. With up to 5 hours a week, don't propose a path that needs 30. If they have paid experience, start from it.
+5. Present the direction as a hypothesis: end the first section with "Test for this week" — one cheap action that shows within 7 days whether the direction is right.
+6. Forbidden: statements that fit anyone ("at times you doubt yourself"), motivational lines, "you are unique and complex", repetition, income promises. Every sentence must rest on one of their answers.
+7. Plain, natural English.`;
 }
 
 function buildHebrewPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock }) {
@@ -262,7 +305,7 @@ ${nameRef}[3–4 sentences. Core psychological pattern and how it shows up in on
 [One sentence. One action doable today. The most important sentence in this report.]`;
 }
 
-function buildPrompt({ plan, archetype, scores, language, name, profile, qa, openAnswers }) {
+function buildPrompt({ plan, archetype, scores, language, name, profile, qa, openAnswers, layers }) {
   const isHe = language === 'he';
   const archetypeName = isHe ? archetype.name_he : archetype.name_en;
   const tagline       = isHe ? archetype.tagline_he : archetype.tagline_en;
@@ -276,15 +319,16 @@ function buildPrompt({ plan, archetype, scores, language, name, profile, qa, ope
           ).join('\n\n')}`)
     : '';
 
+  const personal = buildPersonalBlock({ profile, qa, openAnswers, layers, language });
+
   if (isHe) {
-    const personal = buildPersonalBlock({ profile, qa, openAnswers });
     return buildHebrewPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock: incomePathsBlock + '\n' + personal });
   }
-  return buildEnglishPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock });
+  return buildEnglishPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock: incomePathsBlock + '\n' + personal });
 }
 
-export async function generateReport({ plan, archetype, scores, language, name, profile, qa, openAnswers }) {
-  const prompt = buildPrompt({ plan, archetype, scores, language, name, profile, qa, openAnswers });
+export async function generateReport({ plan, archetype, scores, language, name, profile, qa, openAnswers, layers }) {
+  const prompt = buildPrompt({ plan, archetype, scores, language, name, profile, qa, openAnswers, layers });
 
   const maxTokens = plan === 'premium' ? 4000 : plan === 'advanced' ? 2500 : 1200;
 

@@ -1,9 +1,23 @@
-// Bilingual question bank — Hebrew (original) + English (translation)
-// 60 questions across 6 stages, each option maps to one archetype type.
+// Bilingual question bank — Hebrew + English (rewritten Nov 2026)
+// 48 questions, 8 per layer. Every option is equally attractive (balanced
+// social desirability) and maps to one of five base types. Money and work
+// appear only in layer 6; the rest comes at the answer from the side:
+// flow, the body, early memory, the shadow, the person among others.
+// Option order is rotated per question so the letters carry no pattern.
 
 export const STAGE_LABELS = {
-  he: { 1: 'התחלה', 2: 'הדפוסים שחוזרים', 3: 'חיים אמיתיים', 4: 'בחירה', 5: 'כיוון כסף', 6: 'עומק הדפוס' },
-  en: { 1: 'Opening', 2: 'Repeating Patterns', 3: 'Real Life', 4: 'Choice', 5: 'Money Direction', 6: 'Pattern Depth' },
+  he: { 1: 'מה מושך אותך', 2: 'מה הגוף יודע', 3: 'מאיפה באת', 4: 'הצד המוצל', 5: 'אתה בין אנשים', 6: 'בחירה' },
+  en: { 1: 'What draws you', 2: 'What the body knows', 3: 'Where you came from', 4: 'The shadow side', 5: 'You among others', 6: 'Choice' },
+};
+
+// Which school of thought each layer draws on (sent to the report)
+export const LAYER_SOURCES = {
+  1: 'Flow (Csikszentmihalyi)',
+  2: 'Somatic markers (Damasio), felt sense (Gendlin)',
+  3: 'Early memories (Adler), narrative identity (McAdams)',
+  4: 'Shadow and projection (Jung), parts (IFS)',
+  5: 'Group roles, attachment, third-person perspective',
+  6: 'Forced trade-offs under constraint',
 };
 
 // Helper — get localized field
@@ -12,1045 +26,824 @@ export function q(question, lang) {
 }
 
 export const questions = [
-
-  // ── Stage 1 ───────────────────────────────────────────────
-
   { id: 1, stage: 1,
-    he: { text: 'יש לך חודש שקט בלי לחץ כלכלי. מה אתה מתחיל לעשות כמעט לבד?', options: [
-      { label: 'א', text: 'לכתוב או למפות רעיון שמסדר לי ולאחרים את הראש.', type: 'sage' },
-      { label: 'ב', text: 'לבנות כלי קטן או מערכת שעושה סדר במשהו שמציק לי.', type: 'builder' },
-      { label: 'ג', text: 'ליצור משהו חי — טקסט, וידאו, סדנה או רעיון עם קול אישי.', type: 'creator' },
-      { label: 'ד', text: 'להזמין כמה אנשים לשיחה או מרחב שבו אפשר לחשוב יחד.', type: 'connector' },
-      { label: 'ה', text: 'לבדוק מהר הזדמנות שנראית פתוחה לפני שאחרים ייכנסו.', type: 'hunter' },
+    he: { text: "נשאר לך ערב שלם בלי תוכנית ובלי טלפון. מה הידיים שלך מוצאות לעשות?", options: [
+      { label: 'א', text: "לקרוא משהו ולהישאר עם שאלה אחת שנפתחה", type: 'sage' },
+      { label: 'ב', text: "לתקן, לסדר או לשפר משהו בבית", type: 'builder' },
+      { label: 'ג', text: "לכתוב, לצייר או לבשל משהו שלא היה קודם", type: 'creator' },
+      { label: 'ד', text: "להתקשר למישהו ולדבר איתו עד מאוחר", type: 'connector' },
+      { label: 'ה', text: "לתכנן משהו חדש ולבדוק אם אפשר להתחיל מחר", type: 'hunter' },
     ]},
-    en: { text: 'You have a quiet month with no financial pressure. What do you almost automatically start doing?', options: [
-      { label: 'A', text: 'Writing or mapping an idea that organizes my thinking — and other people\'s.', type: 'sage' },
-      { label: 'B', text: 'Building a small tool or system that fixes something that\'s been annoying me.', type: 'builder' },
-      { label: 'C', text: 'Creating something alive — text, video, a workshop, an idea with a personal voice.', type: 'creator' },
-      { label: 'D', text: 'Inviting people into a conversation or space where we can think together.', type: 'connector' },
-      { label: 'E', text: 'Testing an opportunity that looks open before others get in.', type: 'hunter' },
+    en: { text: "You have a whole evening with no plans and no phone. What do your hands find to do?", options: [
+      { label: 'A', text: "Read something and stay with one question it opened", type: 'sage' },
+      { label: 'B', text: "Fix, organize or improve something at home", type: 'builder' },
+      { label: 'C', text: "Write, draw or cook something that didn't exist before", type: 'creator' },
+      { label: 'D', text: "Call someone and talk until late", type: 'connector' },
+      { label: 'E', text: "Plan something new and check if it can start tomorrow", type: 'hunter' },
     ]},
   },
 
   { id: 2, stage: 1,
-    he: { text: 'חבר אומר לך: ״יש בך משהו שאנשים היו משלמים עליו.״ איזה חלק בך מקווה שהוא רואה?', options: [
-      { label: 'א', text: 'את היכולת להבין לעומק ולהסביר את זה פשוט.', type: 'sage' },
-      { label: 'ב', text: 'את היכולת להפוך בלגן למשהו מסודר שעובד.', type: 'builder' },
-      { label: 'ג', text: 'את הקול האישי שלי — משהו שאי אפשר להעתיק ממני.', type: 'creator' },
-      { label: 'ד', text: 'את היכולת לגרום לאנשים להרגיש בטוחים ומובנים.', type: 'connector' },
-      { label: 'ה', text: 'את האינסטינקט לזהות פתח ולהפוך אותו למהלך.', type: 'hunter' },
+    he: { text: "בפעם האחרונה ששכחת לאכול כי היית שקוע — מה עשית?", options: [
+      { label: 'א', text: "יצרתי משהו והמשכתי ללטש את הצורה שלו", type: 'creator' },
+      { label: 'ב', text: "הייתי בשיחה שלא רציתי שתיגמר", type: 'connector' },
+      { label: 'ג', text: "רדפתי אחרי מטרה שהייתה כמעט בהישג יד", type: 'hunter' },
+      { label: 'ד', text: "חקרתי נושא וקפצתי ממקור למקור", type: 'sage' },
+      { label: 'ה', text: "הרכבתי או ארגנתי משהו עד שעבד", type: 'builder' },
     ]},
-    en: { text: 'A friend says: "There\'s something in you that people would pay for." What part of you hopes they see?', options: [
-      { label: 'A', text: 'My ability to understand things deeply and explain them simply.', type: 'sage' },
-      { label: 'B', text: 'My ability to turn chaos into something organized that actually works.', type: 'builder' },
-      { label: 'C', text: 'My personal voice — something that can\'t be copied from me.', type: 'creator' },
-      { label: 'D', text: 'My ability to make people feel safe and truly understood.', type: 'connector' },
-      { label: 'E', text: 'My instinct for identifying openings and turning them into moves.', type: 'hunter' },
+    en: { text: "The last time you forgot to eat because you were absorbed — what were you doing?", options: [
+      { label: 'A', text: "Making something and refining its form", type: 'creator' },
+      { label: 'B', text: "In a conversation I didn't want to end", type: 'connector' },
+      { label: 'C', text: "Chasing a goal that was almost within reach", type: 'hunter' },
+      { label: 'D', text: "Researching, jumping from source to source", type: 'sage' },
+      { label: 'E', text: "Assembling or organizing something until it worked", type: 'builder' },
     ]},
   },
 
   { id: 3, stage: 1,
-    he: { text: 'איזו מחמאה תישאר איתך כמה ימים?', options: [
-      { label: 'א', text: '״סוף־סוף הבנתי משהו שהיה לי מעורפל שנים.״', type: 'sage' },
-      { label: 'ב', text: '״בזכותך זה נהיה פשוט, מסודר ואפשרי לביצוע.״', type: 'builder' },
-      { label: 'ג', text: '״מה שיצרת הזיז בי משהו. זה הרגיש אמיתי.״', type: 'creator' },
-      { label: 'ד', text: '״איתך הרגשתי שאני לא לבד ושאפשר לדבר בכנות.״', type: 'connector' },
-      { label: 'ה', text: '״ראית לפני כולם לאן זה הולך והעזת לזוז.״', type: 'hunter' },
+    he: { text: "ילד שואל אותך \"מה אתה הכי אוהב לעשות?\" ואין לך זמן לחשוב. מה יוצא לך מהפה?", options: [
+      { label: 'א', text: "להצליח במשהו קשה", type: 'hunter' },
+      { label: 'ב', text: "להבין איך דברים עובדים", type: 'sage' },
+      { label: 'ג', text: "לבנות דברים", type: 'builder' },
+      { label: 'ד', text: "להמציא", type: 'creator' },
+      { label: 'ה', text: "להיות עם אנשים שאני אוהב", type: 'connector' },
     ]},
-    en: { text: 'What compliment would stay with you for days?', options: [
-      { label: 'A', text: '"I finally understood something that had been vague to me for years."', type: 'sage' },
-      { label: 'B', text: '"Because of you, this became simple, organized, and possible to execute."', type: 'builder' },
-      { label: 'C', text: '"What you created moved something in me. It felt real."', type: 'creator' },
-      { label: 'D', text: '"With you I felt I wasn\'t alone and that I could speak honestly."', type: 'connector' },
-      { label: 'E', text: '"You saw before everyone else where this was going, and had the courage to move."', type: 'hunter' },
+    en: { text: "A child asks \"what do you love doing most?\" and you have no time to think. What comes out?", options: [
+      { label: 'A', text: "Pulling off something hard", type: 'hunter' },
+      { label: 'B', text: "Understanding how things work", type: 'sage' },
+      { label: 'C', text: "Building things", type: 'builder' },
+      { label: 'D', text: "Inventing", type: 'creator' },
+      { label: 'E', text: "Being with people I love", type: 'connector' },
     ]},
   },
 
   { id: 4, stage: 1,
-    he: { text: 'מה מרגיש כמו הצלחה בלי להרגיש מזויף?', options: [
-      { label: 'א', text: 'להיות מוכר בזכות בהירות, עומק ושפה שאנשים חוזרים אליה.', type: 'sage' },
-      { label: 'ב', text: 'להחזיק מערכת שימושית שעובדת גם כשאני לא דוחף בכוח.', type: 'builder' },
-      { label: 'ג', text: 'לבנות קהל שמתחבר לקול האישי שלי ולא רק לטיפים.', type: 'creator' },
-      { label: 'ד', text: 'ליצור מרחב שאנשים סומכים עליו ורוצים לחזור אליו.', type: 'connector' },
-      { label: 'ה', text: 'להרוויח מתנועה חכמה, תזמון נכון וזיהוי הזדמנויות.', type: 'hunter' },
+    he: { text: "איזו מחמאה נשארת איתך הכי הרבה זמן?", options: [
+      { label: 'א', text: "\"אפשר לסמוך עליך, זה פשוט עובד\"", type: 'builder' },
+      { label: 'ב', text: "\"אף אחד לא היה חושב על זה ככה\"", type: 'creator' },
+      { label: 'ג', text: "\"לידך הרגשתי בבית\"", type: 'connector' },
+      { label: 'ד', text: "\"איך עשית את זה כל כך מהר?\"", type: 'hunter' },
+      { label: 'ה', text: "\"הסברת לי את זה כך שסוף סוף הבנתי\"", type: 'sage' },
     ]},
-    en: { text: 'What feels like success without feeling fake?', options: [
-      { label: 'A', text: 'Being recognized for clarity, depth, and language that people keep coming back to.', type: 'sage' },
-      { label: 'B', text: 'Holding a useful system that runs even when I\'m not pushing hard.', type: 'builder' },
-      { label: 'C', text: 'Building an audience that connects to my personal voice — not just my tips.', type: 'creator' },
-      { label: 'D', text: 'Creating a space that people trust and genuinely want to return to.', type: 'connector' },
-      { label: 'E', text: 'Earning through smart movement, good timing, and reading opportunity.', type: 'hunter' },
+    en: { text: "Which compliment stays with you the longest?", options: [
+      { label: 'A', text: "\"You can be relied on — it just works\"", type: 'builder' },
+      { label: 'B', text: "\"Nobody else would have thought of it that way\"", type: 'creator' },
+      { label: 'C', text: "\"Next to you I felt at home\"", type: 'connector' },
+      { label: 'D', text: "\"How did you do that so fast?\"", type: 'hunter' },
+      { label: 'E', text: "\"You explained it so I finally understood\"", type: 'sage' },
     ]},
   },
 
   { id: 5, stage: 1,
-    he: { text: 'כשאתה במיטבך, מה נהיה קל יותר לאחרים?', options: [
-      { label: 'א', text: 'להבין מה באמת קורה ומה הצעד ההגיוני הבא.', type: 'sage' },
-      { label: 'ב', text: 'לפעול בתוך סדר במקום לטבוע בפרטים.', type: 'builder' },
-      { label: 'ג', text: 'להרגיש התלהבות, אומץ או חיבור למה שהם רוצים להגיד.', type: 'creator' },
-      { label: 'ד', text: 'להיפתח, להרגיש אמון ולהעז להיות כנים.', type: 'connector' },
-      { label: 'ה', text: 'לראות פתח פעולה ולהפסיק להיתקע בדיונים.', type: 'hunter' },
+    he: { text: "בחנות ספרים, לאיזה מדף אתה הולך קודם בלי לשים לב?", options: [
+      { label: 'א', text: "ביוגרפיות, פסיכולוגיה, יחסים", type: 'connector' },
+      { label: 'ב', text: "יזמות, ספורט, מסעות", type: 'hunter' },
+      { label: 'ג', text: "מדע, פילוסופיה, היסטוריה", type: 'sage' },
+      { label: 'ד', text: "עשה זאת בעצמך, טכנולוגיה, אדריכלות", type: 'builder' },
+      { label: 'ה', text: "אמנות, עיצוב, שירה", type: 'creator' },
     ]},
-    en: { text: 'When you\'re at your best, what becomes easier for others?', options: [
-      { label: 'A', text: 'Understanding what\'s actually happening — and what the logical next step is.', type: 'sage' },
-      { label: 'B', text: 'Acting within clear order instead of drowning in details.', type: 'builder' },
-      { label: 'C', text: 'Feeling excitement, courage, or connection to what they want to create.', type: 'creator' },
-      { label: 'D', text: 'Opening up, feeling trusted, and daring to be honest.', type: 'connector' },
-      { label: 'E', text: 'Seeing a window for action and stopping getting stuck in discussions.', type: 'hunter' },
+    en: { text: "In a bookshop, which shelf do you drift to first without noticing?", options: [
+      { label: 'A', text: "Biography, psychology, relationships", type: 'connector' },
+      { label: 'B', text: "Entrepreneurship, sport, expeditions", type: 'hunter' },
+      { label: 'C', text: "Science, philosophy, history", type: 'sage' },
+      { label: 'D', text: "DIY, technology, architecture", type: 'builder' },
+      { label: 'E', text: "Art, design, poetry", type: 'creator' },
     ]},
   },
 
   { id: 6, stage: 1,
-    he: { text: 'על מה אתה מגן כשאתה נסוג?', options: [
-      { label: 'א', text: 'על השקט המנטלי שלי ועל הצורך להבין לפני שאני זז.', type: 'sage' },
-      { label: 'ב', text: 'על תחושת השליטה שלי ועל הרצון שזה לא יתפרק.', type: 'builder' },
-      { label: 'ג', text: 'על הדופק היצירתי שלי — שלא יהפכו אותו לחובה כבדה.', type: 'creator' },
-      { label: 'ד', text: 'על הגבולות הרגשיים שלי, כי לפעמים אנשים שואבים יותר מדי.', type: 'connector' },
-      { label: 'ה', text: 'על החופש לבחור כיוון אחר אם ארגיש שהחלון השתנה.', type: 'hunter' },
+    he: { text: "מה משעמם אותך הכי מהר?", options: [
+      { label: 'א', text: "שיחה שנשארת על פני השטח", type: 'sage' },
+      { label: 'ב', text: "ישיבות שלא נגמרות בהחלטה", type: 'builder' },
+      { label: 'ג', text: "עבודה שחוזרת על עצמה כל יום אותו דבר", type: 'creator' },
+      { label: 'ד', text: "יום שלם לבד מול משימות", type: 'connector' },
+      { label: 'ה', text: "לחכות שמשהו יקרה", type: 'hunter' },
     ]},
-    en: { text: 'What do you protect when you pull back?', options: [
-      { label: 'A', text: 'My mental quiet — and the need to understand before I move.', type: 'sage' },
-      { label: 'B', text: 'My sense of control — and the desire for things not to fall apart.', type: 'builder' },
-      { label: 'C', text: 'My creative pulse — keeping it from becoming a heavy obligation.', type: 'creator' },
-      { label: 'D', text: 'My emotional boundaries — people can drain me if I let them.', type: 'connector' },
-      { label: 'E', text: 'My freedom to choose a different direction if I feel the window has shifted.', type: 'hunter' },
+    en: { text: "What bores you fastest?", options: [
+      { label: 'A', text: "A conversation that stays on the surface", type: 'sage' },
+      { label: 'B', text: "Meetings that end without a decision", type: 'builder' },
+      { label: 'C', text: "Work that repeats itself every day", type: 'creator' },
+      { label: 'D', text: "A whole day alone with tasks", type: 'connector' },
+      { label: 'E', text: "Waiting for something to happen", type: 'hunter' },
     ]},
   },
 
   { id: 7, stage: 1,
-    he: { text: 'איפה אנשים בדרך כלל מפספסים את הערך שלך?', options: [
-      { label: 'א', text: 'הם רואים שאני חושב הרבה, אבל לא רואים כמה בהירות זה יוצר.', type: 'sage' },
-      { label: 'ב', text: 'הם רואים שאני מסדר דברים, אבל לא מבינים כמה אנרגיה וכסף זה חוסך.', type: 'builder' },
-      { label: 'ג', text: 'הם רואים רגש או סגנון, אבל לא את היכולת למשוך תשומת לב אמיתית.', type: 'creator' },
-      { label: 'ד', text: 'הם רואים שאני מקשיב, אבל לא מבינים כמה אמון זה בונה.', type: 'connector' },
-      { label: 'ה', text: 'הם רואים שאני זז מהר, אבל לא את החוש לזהות תזמון.', type: 'hunter' },
+    he: { text: "אתה נכנס לחדר מלא אנשים שאתה לא מכיר. לאן העיניים הולכות קודם?", options: [
+      { label: 'א', text: "לפרטים — אור, בגדים, משהו יפה", type: 'creator' },
+      { label: 'ב', text: "למי שעומד לבד", type: 'connector' },
+      { label: 'ג', text: "למי שהכי חשוב פה", type: 'hunter' },
+      { label: 'ד', text: "למי שמדבר על משהו מעניין", type: 'sage' },
+      { label: 'ה', text: "לאיך החדר מאורגן ומה לא עובד בו", type: 'builder' },
     ]},
-    en: { text: 'Where do people usually miss your value?', options: [
-      { label: 'A', text: 'They see me thinking a lot, but don\'t see how much clarity it actually produces.', type: 'sage' },
-      { label: 'B', text: 'They see me organizing things, but don\'t understand how much energy and money that saves.', type: 'builder' },
-      { label: 'C', text: 'They see emotion or style, but not the ability to pull real sustained attention.', type: 'creator' },
-      { label: 'D', text: 'They see me listening, but don\'t grasp how much trust that quietly builds.', type: 'connector' },
-      { label: 'E', text: 'They see me moving fast, but miss the sense for timing underneath it.', type: 'hunter' },
+    en: { text: "You walk into a room full of strangers. Where do your eyes go first?", options: [
+      { label: 'A', text: "To details — light, clothes, something beautiful", type: 'creator' },
+      { label: 'B', text: "To whoever is standing alone", type: 'connector' },
+      { label: 'C', text: "To whoever matters most here", type: 'hunter' },
+      { label: 'D', text: "To whoever is talking about something interesting", type: 'sage' },
+      { label: 'E', text: "To how the room is set up and what isn't working", type: 'builder' },
     ]},
   },
 
   { id: 8, stage: 1,
-    he: { text: 'על איזו גרסה של עצמך אתה הכי סומך?', options: [
-      { label: 'א', text: 'על זו שמבינה את הדפוס לפני שהיא מגיבה.', type: 'sage' },
-      { label: 'ב', text: 'על זו שבונה תהליך במקום להיבהל מהבלגן.', type: 'builder' },
-      { label: 'ג', text: 'על זו שמעזה להגיד משהו חי ולא מהונדס מדי.', type: 'creator' },
-      { label: 'ד', text: 'על זו שמרגישה אנשים בלי לאבד את עצמה.', type: 'connector' },
-      { label: 'ה', text: 'על זו שמזהה הזדמנות ופועלת בלי לחכות לאישור מלא.', type: 'hunter' },
+    he: { text: "כשמשהו שעשית מצליח, מה הכי מספק אותך?", options: [
+      { label: 'א', text: "שהגעתי לשם ראשון", type: 'hunter' },
+      { label: 'ב', text: "שהבנתי משהו שלא הבנתי קודם", type: 'sage' },
+      { label: 'ג', text: "שזה ממשיך לעבוד גם בלעדיי", type: 'builder' },
+      { label: 'ד', text: "שזה נושא את החתימה שלי", type: 'creator' },
+      { label: 'ה', text: "שמישהו אחר הרוויח מזה", type: 'connector' },
     ]},
-    en: { text: 'Which version of yourself do you trust most?', options: [
-      { label: 'A', text: 'The one that reads the pattern before reacting.', type: 'sage' },
-      { label: 'B', text: 'The one that builds a process instead of panicking at the mess.', type: 'builder' },
-      { label: 'C', text: 'The one that dares to say something alive and unengineered.', type: 'creator' },
-      { label: 'D', text: 'The one that feels people without losing itself.', type: 'connector' },
-      { label: 'E', text: 'The one that spots an opening and moves without waiting for full approval.', type: 'hunter' },
+    en: { text: "When something you did succeeds, what satisfies you most?", options: [
+      { label: 'A', text: "That I got there first", type: 'hunter' },
+      { label: 'B', text: "That I understood something I didn't before", type: 'sage' },
+      { label: 'C', text: "That it keeps working without me", type: 'builder' },
+      { label: 'D', text: "That it carries my signature", type: 'creator' },
+      { label: 'E', text: "That someone else benefited", type: 'connector' },
     ]},
   },
 
-  // ── Stage 2 ───────────────────────────────────────────────
-
   { id: 9, stage: 2,
-    he: { text: 'רעיון טוב מופיע. מה קורה בדרך כלל אחרי ההתרגשות הראשונה?', options: [
-      { label: 'א', text: 'אני מתחיל לחקור עוד ועוד עד שהפעולה מתרחקת.', type: 'sage' },
-      { label: 'ב', text: 'אני בונה סביבו יותר מדי לפני שבדקתי אם מישהו רוצה את זה.', type: 'builder' },
-      { label: 'ג', text: 'אני מספר אותו יפה, אבל מתקשה להחזיק אותו כשהניצוץ יורד.', type: 'creator' },
-      { label: 'ד', text: 'אני מחפש מישהו שיאמין איתי לפני שאני מתקדם לבד.', type: 'connector' },
-      { label: 'ה', text: 'אני קופץ מהר, ואז מגלה שלא הגדרתי גבולות מספיק ברורים.', type: 'hunter' },
+    he: { text: "מה גורם לך הכי מהר להרגיש כיווץ בבטן?", options: [
+      { label: 'א', text: "בלגן שאף אחד לא לוקח עליו אחריות", type: 'builder' },
+      { label: 'ב', text: "כשמבקשים ממני להעתיק משהו קיים", type: 'creator' },
+      { label: 'ג', text: "מתח בין אנשים שאני אוהב", type: 'connector' },
+      { label: 'ד', text: "לחכות בלי לדעת מתי זה ייגמר", type: 'hunter' },
+      { label: 'ה', text: "מישהו שמדבר בביטחון על משהו שהוא לא מבין", type: 'sage' },
     ]},
-    en: { text: 'A good idea appears. What usually happens after the first excitement?', options: [
-      { label: 'A', text: 'I keep researching until action gradually moves further away.', type: 'sage' },
-      { label: 'B', text: 'I build too much around it before checking if anyone actually wants it.', type: 'builder' },
-      { label: 'C', text: 'I tell it well, but struggle to hold it once the spark fades.', type: 'creator' },
-      { label: 'D', text: 'I look for someone to believe in it with me before I move forward alone.', type: 'connector' },
-      { label: 'E', text: 'I jump fast, then discover I didn\'t set clear enough limits.', type: 'hunter' },
+    en: { text: "What makes your stomach tighten fastest?", options: [
+      { label: 'A', text: "A mess nobody takes responsibility for", type: 'builder' },
+      { label: 'B', text: "Being asked to copy something that already exists", type: 'creator' },
+      { label: 'C', text: "Tension between people I love", type: 'connector' },
+      { label: 'D', text: "Waiting without knowing when it ends", type: 'hunter' },
+      { label: 'E', text: "Someone speaking confidently about what they don't understand", type: 'sage' },
     ]},
   },
 
   { id: 10, stage: 2,
-    he: { text: 'מתי המומנטום שלך נופל?', options: [
-      { label: 'א', text: 'כשנכנס מידע חדש שגורם לי לפתוח הכול מחדש.', type: 'sage' },
-      { label: 'ב', text: 'כשיש יותר מדי חלקים פתוחים ואין תהליך ברור.', type: 'builder' },
-      { label: 'ג', text: 'כשהדבר נהיה טכני, חוזר או חסר חיים.', type: 'creator' },
-      { label: 'ד', text: 'כשאני מרגיש לא נראה, לא מוחזק או לבד מדי.', type: 'connector' },
-      { label: 'ה', text: 'כשמופיעה אפשרות חדשה שנראית חדה יותר מהקיימת.', type: 'hunter' },
+    he: { text: "מה גורם לך לנשום עמוק ולהשתחרר?", options: [
+      { label: 'א', text: "חיבוק או שיחה עם מישהו קרוב", type: 'connector' },
+      { label: 'ב', text: "תנועה — לצאת לדרך, להזיע", type: 'hunter' },
+      { label: 'ג', text: "שקט ומקום לחשוב", type: 'sage' },
+      { label: 'ד', text: "רשימה שכולה מסומנת", type: 'builder' },
+      { label: 'ה', text: "חומר בידיים — צבע, בצק, מילים", type: 'creator' },
     ]},
-    en: { text: 'When does your momentum drop?', options: [
-      { label: 'A', text: 'When new information arrives and makes me reopen everything I thought was settled.', type: 'sage' },
-      { label: 'B', text: 'When there are too many open parts and no clear process to follow.', type: 'builder' },
-      { label: 'C', text: 'When the work becomes technical, repetitive, or loses its aliveness.', type: 'creator' },
-      { label: 'D', text: 'When I feel unseen, unsupported, or too alone in it.', type: 'connector' },
-      { label: 'E', text: 'When a new option appears that seems sharper than what I\'m currently in.', type: 'hunter' },
+    en: { text: "What makes you breathe deep and let go?", options: [
+      { label: 'A', text: "A hug or a talk with someone close", type: 'connector' },
+      { label: 'B', text: "Movement — hitting the road, sweating", type: 'hunter' },
+      { label: 'C', text: "Quiet and room to think", type: 'sage' },
+      { label: 'D', text: "A list with everything ticked", type: 'builder' },
+      { label: 'E', text: "Material in my hands — paint, dough, words", type: 'creator' },
     ]},
   },
 
   { id: 11, stage: 2,
-    he: { text: 'איזו משימה אתה דוחה הכי הרבה זמן?', options: [
-      { label: 'א', text: 'משימה שתחשוף אם אני באמת מבין מספיק.', type: 'sage' },
-      { label: 'ב', text: 'משימה שמחייבת לשחרר גרסה לא מושלמת.', type: 'builder' },
-      { label: 'ג', text: 'משימה שדורשת לחזור על אותו מסר אחרי שההתלהבות ירדה.', type: 'creator' },
-      { label: 'ד', text: 'משימה שדורשת לבקש משהו ישירות מאדם אחר.', type: 'connector' },
-      { label: 'ה', text: 'משימה שסוגרת אפשרויות ומכריחה לבחור מסלול אחד.', type: 'hunter' },
+    he: { text: "תיזכר בפעם האחרונה שהלב דפק לך מהתרגשות, לא מפחד. מה קרה שם?", options: [
+      { label: 'א', text: "משהו התחבר לי פתאום בראש", type: 'sage' },
+      { label: 'ב', text: "משהו שבניתי עבד בפעם הראשונה", type: 'builder' },
+      { label: 'ג', text: "הצגתי משהו שיצרתי", type: 'creator' },
+      { label: 'ד', text: "פגשתי מישהו חשוב לי", type: 'connector' },
+      { label: 'ה', text: "הזדמנות נפתחה ממש מולי", type: 'hunter' },
     ]},
-    en: { text: 'What task do you delay the longest?', options: [
-      { label: 'A', text: 'One that will expose whether I truly understand enough.', type: 'sage' },
-      { label: 'B', text: 'One that requires releasing an imperfect version.', type: 'builder' },
-      { label: 'C', text: 'One that requires repeating the same message after the excitement is gone.', type: 'creator' },
-      { label: 'D', text: 'One that requires asking for something directly from another person.', type: 'connector' },
-      { label: 'E', text: 'One that closes options and forces me to commit to one path.', type: 'hunter' },
+    en: { text: "Remember the last time your heart raced from excitement, not fear. What was happening?", options: [
+      { label: 'A', text: "Something suddenly clicked in my head", type: 'sage' },
+      { label: 'B', text: "Something I built worked for the first time", type: 'builder' },
+      { label: 'C', text: "I showed something I made", type: 'creator' },
+      { label: 'D', text: "I met someone who matters to me", type: 'connector' },
+      { label: 'E', text: "An opportunity opened right in front of me", type: 'hunter' },
     ]},
   },
 
   { id: 12, stage: 2,
-    he: { text: 'מה גורם לך לסיים משהו קשה?', options: [
-      { label: 'א', text: 'סיבה ברורה שממשיכה להרגיש נכונה גם אחרי ההתלהבות.', type: 'sage' },
-      { label: 'ב', text: 'רשימת צעדים קצרה וסוף מוגדר שאפשר לראות.', type: 'builder' },
-      { label: 'ג', text: 'דדליין שיש בו משמעות רגשית ולא רק לחץ חיצוני.', type: 'creator' },
-      { label: 'ד', text: 'אדם אמיתי שמחכה לתוצאה וסומך עליי.', type: 'connector' },
-      { label: 'ה', text: 'חלון הזדמנות צר שאני לא רוצה לפספס.', type: 'hunter' },
+    he: { text: "אתה גמור מעייפות. מה עדיין מצליח להחזיר לך כוח?", options: [
+      { label: 'א', text: "מוזיקה, או משהו יפה לעיניים", type: 'creator' },
+      { label: 'ב', text: "הודעה ממישהו שאני אוהב", type: 'connector' },
+      { label: 'ג', text: "דדליין או תחרות", type: 'hunter' },
+      { label: 'ד', text: "רעיון חדש שמסקרן אותי", type: 'sage' },
+      { label: 'ה', text: "לסגור עוד משימה אחת ולראות סדר", type: 'builder' },
     ]},
-    en: { text: 'What makes you actually finish something hard?', options: [
-      { label: 'A', text: 'A clear reason that still feels right even after the excitement is gone.', type: 'sage' },
-      { label: 'B', text: 'A short list of steps and a defined endpoint I can see from here.', type: 'builder' },
-      { label: 'C', text: 'A deadline with real emotional meaning — not just external pressure.', type: 'creator' },
-      { label: 'D', text: 'A real person waiting on the result who genuinely trusts me.', type: 'connector' },
-      { label: 'E', text: 'A narrow window of opportunity I\'m unwilling to miss.', type: 'hunter' },
+    en: { text: "You're exhausted. What can still bring your energy back?", options: [
+      { label: 'A', text: "Music, or something beautiful to look at", type: 'creator' },
+      { label: 'B', text: "A message from someone I love", type: 'connector' },
+      { label: 'C', text: "A deadline or a competition", type: 'hunter' },
+      { label: 'D', text: "A new idea that intrigues me", type: 'sage' },
+      { label: 'E', text: "Closing one more task and seeing order", type: 'builder' },
     ]},
   },
 
   { id: 13, stage: 2,
-    he: { text: 'איזו שגרה אתה באמת מסוגל לחיות איתה?', options: [
-      { label: 'א', text: 'שגרה שיש בה זמן לחשוב, לכתוב ולזקק.', type: 'sage' },
-      { label: 'ב', text: 'שגרה עם סדר פשוט, מדדים ברורים וחזרתיות לא מעיקה.', type: 'builder' },
-      { label: 'ג', text: 'שגרה שיש בה מקום לשינוי, ביטוי ונשימה יצירתית.', type: 'creator' },
-      { label: 'ד', text: 'שגרה שיש בה מגע אנושי אבל גם גבולות שומרים.', type: 'connector' },
-      { label: 'ה', text: 'שגרה קצרה, מהירה, עם בדיקות ותנועה קדימה.', type: 'hunter' },
+    he: { text: "הגוף יודע לפני הראש. מתי הוא אמר לך \"לא\", ובדיעבד צדק?", options: [
+      { label: 'א', text: "כשזה היה איטי ותקוע מדי", type: 'hunter' },
+      { label: 'ב', text: "כשהסיפור שסיפרו לי לא היה הגיוני", type: 'sage' },
+      { label: 'ג', text: "כשהתוכנית הייתה רעועה", type: 'builder' },
+      { label: 'ד', text: "כשניסו לכפות עליי סגנון שאינו שלי", type: 'creator' },
+      { label: 'ה', text: "כשהרגשתי שמישהו לא כן איתי", type: 'connector' },
     ]},
-    en: { text: 'What routine can you genuinely live with?', options: [
-      { label: 'A', text: 'One with time to think, write, and distill ideas without interruption.', type: 'sage' },
-      { label: 'B', text: 'One with simple order, clear metrics, and non-oppressive repetition.', type: 'builder' },
-      { label: 'C', text: 'One that allows change, expression, and creative breathing room.', type: 'creator' },
-      { label: 'D', text: 'One with real human contact but also boundaries that protect me.', type: 'connector' },
-      { label: 'E', text: 'Short, fast, with checkpoints and a sense of constant forward movement.', type: 'hunter' },
+    en: { text: "The body knows before the head. When did it say \"no\" and turn out right?", options: [
+      { label: 'A', text: "When it was too slow and stuck", type: 'hunter' },
+      { label: 'B', text: "When the story I was told didn't add up", type: 'sage' },
+      { label: 'C', text: "When the plan was shaky", type: 'builder' },
+      { label: 'D', text: "When someone forced a style on me that wasn't mine", type: 'creator' },
+      { label: 'E', text: "When I sensed someone wasn't honest with me", type: 'connector' },
     ]},
   },
 
   { id: 14, stage: 2,
-    he: { text: 'איזה פידבק פוגע בך הכי חזק?', options: [
-      { label: 'א', text: '״זה לא ברור.״ כי חשוב לי שיבינו את מה שראיתי.', type: 'sage' },
-      { label: 'ב', text: '״זה מסורבל מדי.״ כי ניסיתי לבנות את זה נכון.', type: 'builder' },
-      { label: 'ג', text: '״זה לא מרגיש אמיתי.״ כי אני רוצה לגעת, לא רק להסביר.', type: 'creator' },
-      { label: 'ד', text: '״אני לא סומך על זה.״ כי אמון הוא הבסיס שלי.', type: 'connector' },
-      { label: 'ה', text: '״זזת מהר מדי.״ כי אני מרגיש שהחלון נסגר אם מחכים.', type: 'hunter' },
+    he: { text: "באיזה מקום אתה מרגיש שהגב שלך מתיישר מעצמו?", options: [
+      { label: 'א', text: "בסדנה, במטבח מקצועי, ליד כלים", type: 'builder' },
+      { label: 'ב', text: "בסטודיו עם אור ובלגן יצירתי", type: 'creator' },
+      { label: 'ג', text: "סביב שולחן משותף מלא אנשים", type: 'connector' },
+      { label: 'ד', text: "בשטח, במקום שמשתנה כל יום", type: 'hunter' },
+      { label: 'ה', text: "בספרייה או בחדר שקט", type: 'sage' },
     ]},
-    en: { text: 'What feedback lands hardest?', options: [
-      { label: 'A', text: '"This isn\'t clear." Because I care deeply about being understood.', type: 'sage' },
-      { label: 'B', text: '"This is too clunky." Because I tried to build it properly.', type: 'builder' },
-      { label: 'C', text: '"This doesn\'t feel real." Because I want to move people, not just explain.', type: 'creator' },
-      { label: 'D', text: '"I don\'t trust this." Because trust is the foundation I build from.', type: 'connector' },
-      { label: 'E', text: '"You moved too fast." Because I felt the window was already closing.', type: 'hunter' },
+    en: { text: "Where does your back straighten by itself?", options: [
+      { label: 'A', text: "In a workshop, pro kitchen, near tools", type: 'builder' },
+      { label: 'B', text: "In a studio with light and creative mess", type: 'creator' },
+      { label: 'C', text: "Around a shared table full of people", type: 'connector' },
+      { label: 'D', text: "Out in the field, somewhere that changes daily", type: 'hunter' },
+      { label: 'E', text: "In a library or quiet room", type: 'sage' },
     ]},
   },
 
   { id: 15, stage: 2,
-    he: { text: 'מה אתה עושה כשמשהו מתחיל לעבוד?', options: [
-      { label: 'א', text: 'בודק שוב את ההנחות במקום פשוט להמשיך.', type: 'sage' },
-      { label: 'ב', text: 'מנסה לשפר את המערכת לפני שמיציתי את הגרסה הנוכחית.', type: 'builder' },
-      { label: 'ג', text: 'מתחיל להשתעמם כי זה נהיה פחות חדש.', type: 'creator' },
-      { label: 'ד', text: 'דואג שאנשים יצפו ממני ליותר ממה שאוכל להחזיק.', type: 'connector' },
-      { label: 'ה', text: 'מחפש את המהלך הגדול הבא במקום לצבור על הקיים.', type: 'hunter' },
+    he: { text: "מה הידיים שלך עושות כשאתה מקשיב למישהו מדבר?", options: [
+      { label: 'א', text: "קרובות, נוגעות, מהנהנות", type: 'connector' },
+      { label: 'ב', text: "לא נחות, רוצות לזוז", type: 'hunter' },
+      { label: 'ג', text: "נחות בשקט, אני כולי בראש", type: 'sage' },
+      { label: 'ד', text: "משחקות עם חפץ, מפרקות ומרכיבות", type: 'builder' },
+      { label: 'ה', text: "משרבטות", type: 'creator' },
     ]},
-    en: { text: 'What do you do when something starts working?', options: [
-      { label: 'A', text: 'Re-examine the assumptions instead of just continuing forward.', type: 'sage' },
-      { label: 'B', text: 'Try to improve the system before getting the most from the current version.', type: 'builder' },
-      { label: 'C', text: 'Start to lose interest because it\'s become less new.', type: 'creator' },
-      { label: 'D', text: 'Worry that people will expect more from me than I can sustainably hold.', type: 'connector' },
-      { label: 'E', text: 'Look for the next big move instead of compounding on what\'s already there.', type: 'hunter' },
+    en: { text: "What do your hands do while you listen to someone?", options: [
+      { label: 'A', text: "Stay close, touch, nod", type: 'connector' },
+      { label: 'B', text: "Can't rest, want to move", type: 'hunter' },
+      { label: 'C', text: "Rest still — I'm all in my head", type: 'sage' },
+      { label: 'D', text: "Fiddle with an object, take it apart", type: 'builder' },
+      { label: 'E', text: "Doodle", type: 'creator' },
     ]},
   },
 
   { id: 16, stage: 2,
-    he: { text: 'איזה דפוס ישן מתחיל לעלות לך ביוקר?', options: [
-      { label: 'א', text: 'לדעת מספיק ואז לחכות לעוד ודאות.', type: 'sage' },
-      { label: 'ב', text: 'לבנות עוד שכבה במקום להוציא גרסה ראשונה.', type: 'builder' },
-      { label: 'ג', text: 'להתחיל באש ואז להיעלם בתחזוקה.', type: 'creator' },
-      { label: 'ד', text: 'לתת יותר תמיכה ממה שאני מתמחר או מבקש בחזרה.', type: 'connector' },
-      { label: 'ה', text: 'להחליף כיוון כשמשהו מתחיל להיות אמיתי.', type: 'hunter' },
+    he: { text: "אחרי איזה יום אתה נרדם הכי מרוצה?", options: [
+      { label: 'א', text: "יום שלמדתי בו משהו", type: 'sage' },
+      { label: 'ב', text: "יום שסגרתי בו הרבה", type: 'builder' },
+      { label: 'ג', text: "יום שיצרתי בו משהו חדש", type: 'creator' },
+      { label: 'ד', text: "יום שהייתי טוב בו למישהו", type: 'connector' },
+      { label: 'ה', text: "יום שהתקדמתי בו למטרה", type: 'hunter' },
     ]},
-    en: { text: 'What old pattern is starting to cost you?', options: [
-      { label: 'A', text: 'Knowing enough — then waiting for more certainty before acting.', type: 'sage' },
-      { label: 'B', text: 'Adding another layer instead of shipping a first version.', type: 'builder' },
-      { label: 'C', text: 'Starting with fire, then disappearing when the work becomes maintenance.', type: 'creator' },
-      { label: 'D', text: 'Giving more support than I price or receive in return.', type: 'connector' },
-      { label: 'E', text: 'Changing direction just when something starts becoming real.', type: 'hunter' },
+    en: { text: "After what kind of day do you fall asleep most content?", options: [
+      { label: 'A', text: "A day I learned something", type: 'sage' },
+      { label: 'B', text: "A day I closed a lot", type: 'builder' },
+      { label: 'C', text: "A day I made something new", type: 'creator' },
+      { label: 'D', text: "A day I was good to someone", type: 'connector' },
+      { label: 'E', text: "A day I moved toward a goal", type: 'hunter' },
     ]},
   },
 
-  // ── Stage 3 ───────────────────────────────────────────────
-
   { id: 17, stage: 3,
-    he: { text: 'הבטחת לעצמך להתחיל מחר. מחר הגיע. מה באמת נכנס בדרך?', options: [
-      { label: 'א', text: 'אני רוצה להבין עוד קצת לפני שאעשה משהו נראה לעין.', type: 'sage' },
-      { label: 'ב', text: 'אני מרגיש שזה עדיין לא מספיק מסודר כדי להתחיל.', type: 'builder' },
-      { label: 'ג', text: 'אני לא מרגיש את האנרגיה שהייתה לי אתמול.', type: 'creator' },
-      { label: 'ד', text: 'אני צריך שמישהו יראה אותי או יחזיק איתי את ההתחלה.', type: 'connector' },
-      { label: 'ה', text: 'קפץ לי כיוון אחר שנראה פתאום חכם יותר.', type: 'hunter' },
+    he: { text: "הזיכרון הכי מוקדם שבו היית גאה בעצמך — מה עשית שם?", options: [
+      { label: 'א', text: "ציירתי, שרתי או המצאתי משחק", type: 'creator' },
+      { label: 'ב', text: "עזרתי למישהו או השלמתי בין חברים", type: 'connector' },
+      { label: 'ג', text: "ניצחתי, או העזתי לעשות משהו מפחיד", type: 'hunter' },
+      { label: 'ד', text: "שאלתי שאלה שהפתיעה את המבוגרים", type: 'sage' },
+      { label: 'ה', text: "בניתי משהו לבד", type: 'builder' },
     ]},
-    en: { text: 'You promised yourself you\'d start tomorrow. Tomorrow arrives. What actually gets in the way?', options: [
-      { label: 'A', text: 'I want to understand a little more before I do something visible.', type: 'sage' },
-      { label: 'B', text: 'It still doesn\'t feel organized enough to begin.', type: 'builder' },
-      { label: 'C', text: 'I don\'t have the energy I felt yesterday.', type: 'creator' },
-      { label: 'D', text: 'I need someone to witness the start with me.', type: 'connector' },
-      { label: 'E', text: 'A different direction appeared that suddenly seems smarter.', type: 'hunter' },
+    en: { text: "Your earliest memory of being proud of yourself — what were you doing?", options: [
+      { label: 'A', text: "Drawing, singing or inventing a game", type: 'creator' },
+      { label: 'B', text: "Helping someone or making peace between friends", type: 'connector' },
+      { label: 'C', text: "Winning, or daring something scary", type: 'hunter' },
+      { label: 'D', text: "Asking a question that surprised the adults", type: 'sage' },
+      { label: 'E', text: "Building something by myself", type: 'builder' },
     ]},
   },
 
   { id: 18, stage: 3,
-    he: { text: 'מישהו מציע לעזור לך. מה התגובה הפנימית הראשונה שלך?', options: [
-      { label: 'א', text: 'אני רוצה לדעת אם הוא באמת מבין את הבעיה.', type: 'sage' },
-      { label: 'ב', text: 'אני מיד חושב איך לחלק תפקידים וסדר.', type: 'builder' },
-      { label: 'ג', text: 'אני מתרגש, אבל חושש שזה יהרוס את החופש שלי.', type: 'creator' },
-      { label: 'ד', text: 'אני מרגיש הקלה — אולי לא אצטרך להחזיק הכול לבד.', type: 'connector' },
-      { label: 'ה', text: 'אני בודק אם הוא יכול לפתוח לי דלת או לקצר דרך.', type: 'hunter' },
+    he: { text: "כילד, לאיזה משחק חזרת שוב ושוב?", options: [
+      { label: 'א', text: "מסחר בקלפים, תחרויות, הרפתקאות בחוץ", type: 'hunter' },
+      { label: 'ב', text: "חידות, אנציקלופדיות, לשאול \"למה\"", type: 'sage' },
+      { label: 'ג', text: "לגו, מחנות, לפרק מכשירים", type: 'builder' },
+      { label: 'ד', text: "תחפושות, סיפורים, ציור", type: 'creator' },
+      { label: 'ה', text: "משחקי \"משפחה\" ותפקידים עם חברים", type: 'connector' },
     ]},
-    en: { text: 'Someone offers to help you. What\'s your first internal reaction?', options: [
-      { label: 'A', text: 'I want to know if they truly understand the problem.', type: 'sage' },
-      { label: 'B', text: 'I immediately start thinking about how to divide roles and structure.', type: 'builder' },
-      { label: 'C', text: 'I get excited — but worried it will limit my freedom.', type: 'creator' },
-      { label: 'D', text: 'Relief. Maybe I won\'t have to carry everything alone.', type: 'connector' },
-      { label: 'E', text: 'I check whether they can open a door or shorten a path for me.', type: 'hunter' },
+    en: { text: "As a child, which game did you return to again and again?", options: [
+      { label: 'A', text: "Trading cards, contests, outdoor adventures", type: 'hunter' },
+      { label: 'B', text: "Riddles, encyclopedias, asking \"why\"", type: 'sage' },
+      { label: 'C', text: "Lego, forts, taking gadgets apart", type: 'builder' },
+      { label: 'D', text: "Dress-up, stories, drawing", type: 'creator' },
+      { label: 'E', text: "Playing \"family\" and roles with friends", type: 'connector' },
     ]},
   },
 
   { id: 19, stage: 3,
-    he: { text: 'אתה צריך להראות למישהו עבודה לא גמורה. מה קורה לך בגוף?', options: [
-      { label: 'א', text: 'מתכווץ לי כי עוד לא הסברתי את זה מספיק טוב.', type: 'sage' },
-      { label: 'ב', text: 'אני רוצה לתקן עוד כמה דברים לפני שיראו.', type: 'builder' },
-      { label: 'ג', text: 'אני חושש שזה לא יעביר את התחושה שרציתי.', type: 'creator' },
-      { label: 'ד', text: 'אני מחפש סימן שהוא איתי ולא שופט אותי.', type: 'connector' },
-      { label: 'ה', text: 'אני מוכן להראות אם זה יקדם החלטה מהירה.', type: 'hunter' },
+    he: { text: "מה אמרו עליך בבית כשהיית קטן?", options: [
+      { label: 'א', text: "\"אפשר לתת לו אחריות\"", type: 'builder' },
+      { label: 'ב', text: "\"הוא בעולם משלו\"", type: 'creator' },
+      { label: 'ג', text: "\"הוא חבר של כולם\"", type: 'connector' },
+      { label: 'ד', text: "\"אי אפשר לעצור אותו\"", type: 'hunter' },
+      { label: 'ה', text: "\"הוא כל הזמן שואל\"", type: 'sage' },
     ]},
-    en: { text: 'You need to show someone unfinished work. What happens in your body?', options: [
-      { label: 'A', text: 'A tightening — I haven\'t explained it well enough yet.', type: 'sage' },
-      { label: 'B', text: 'An urge to fix a few more things before anyone sees it.', type: 'builder' },
-      { label: 'C', text: 'Worry that it won\'t convey the feeling I intended.', type: 'creator' },
-      { label: 'D', text: 'I scan for a sign that they\'re with me and not judging.', type: 'connector' },
-      { label: 'E', text: 'Readiness — if it moves a decision forward, let\'s go.', type: 'hunter' },
+    en: { text: "What did they say about you at home when you were small?", options: [
+      { label: 'A', text: "\"You can give him responsibility\"", type: 'builder' },
+      { label: 'B', text: "\"He's in his own world\"", type: 'creator' },
+      { label: 'C', text: "\"He's everyone's friend\"", type: 'connector' },
+      { label: 'D', text: "\"There's no stopping him\"", type: 'hunter' },
+      { label: 'E', text: "\"He never stops asking\"", type: 'sage' },
     ]},
   },
 
   { id: 20, stage: 3,
-    he: { text: 'הזדמנות חדשה מופיעה בזמן שאתה כבר בונה משהו. מה מפתה אותך?', options: [
-      { label: 'א', text: 'אולי היא מסבירה טוב יותר את מה שניסיתי להבין.', type: 'sage' },
-      { label: 'ב', text: 'אולי יש בה מבנה נקי יותר ממה שבניתי.', type: 'builder' },
-      { label: 'ג', text: 'אולי היא תחזיר לי את ההתרגשות שאבדה.', type: 'creator' },
-      { label: 'ד', text: 'אולי שם יהיו האנשים הנכונים יותר.', type: 'connector' },
-      { label: 'ה', text: 'אולי זה החלון האמיתי, ואם לא אזוז אפספס.', type: 'hunter' },
+    he: { text: "איזו דמות מסיפור או סרט ריגשה אותך הכי הרבה כנער?", options: [
+      { label: 'א', text: "החבר הנאמן שמחזיק את הקבוצה", type: 'connector' },
+      { label: 'ב', text: "הגיבור שיוצא למסע ומנצח", type: 'hunter' },
+      { label: 'ג', text: "החכם או המורה", type: 'sage' },
+      { label: 'ד', text: "הממציא שבונה משהו מכלום", type: 'builder' },
+      { label: 'ה', text: "האמן שהלך בדרך שלו", type: 'creator' },
     ]},
-    en: { text: 'A new opportunity appears while you\'re already building something. What tempts you?', options: [
-      { label: 'A', text: 'Maybe it explains better what I was trying to understand.', type: 'sage' },
-      { label: 'B', text: 'Maybe it has a cleaner structure than what I\'ve been building.', type: 'builder' },
-      { label: 'C', text: 'Maybe it will bring back the excitement I\'ve been missing.', type: 'creator' },
-      { label: 'D', text: 'Maybe the right people are over there.', type: 'connector' },
-      { label: 'E', text: 'Maybe this is the real window — and if I don\'t move, I\'ll miss it.', type: 'hunter' },
+    en: { text: "Which character from a story or film moved you most as a teenager?", options: [
+      { label: 'A', text: "The loyal friend who holds the group together", type: 'connector' },
+      { label: 'B', text: "The hero who sets out and wins", type: 'hunter' },
+      { label: 'C', text: "The wise one or the teacher", type: 'sage' },
+      { label: 'D', text: "The inventor who builds from nothing", type: 'builder' },
+      { label: 'E', text: "The artist who went his own way", type: 'creator' },
     ]},
   },
 
   { id: 21, stage: 3,
-    he: { text: 'קיבלת לא ישיר. מה אתה עושה אחר כך?', options: [
-      { label: 'א', text: 'מנסה להבין מה בדיוק לא היה ברור או מדויק.', type: 'sage' },
-      { label: 'ב', text: 'בודק מה צריך לשפר במבנה או בהצעה.', type: 'builder' },
-      { label: 'ג', text: 'נפגע רגע, ואז צריך להחזיר לעצמי את הקול.', type: 'creator' },
-      { label: 'ד', text: 'לוקח את זה אישי יותר ממה שהייתי רוצה להודות.', type: 'connector' },
-      { label: 'ה', text: 'עובר מהר לאפשרות הבאה כדי לא להיתקע.', type: 'hunter' },
+    he: { text: "אם היית יכול לחזור לגיל 12 עם משפט אחד — מה היית אומר לעצמך?", options: [
+      { label: 'א', text: "\"תמשיך לשאול, גם כשצוחקים עליך\"", type: 'sage' },
+      { label: 'ב', text: "\"מה שאתה בונה יחזיק\"", type: 'builder' },
+      { label: 'ג', text: "\"אל תתבייש במה ששונה בך\"", type: 'creator' },
+      { label: 'ד', text: "\"האנשים הם האוצר\"", type: 'connector' },
+      { label: 'ה', text: "\"תעז מוקדם יותר\"", type: 'hunter' },
     ]},
-    en: { text: 'You received an indirect \'no\'. What do you do next?', options: [
-      { label: 'A', text: 'Try to understand exactly what wasn\'t clear or precise.', type: 'sage' },
-      { label: 'B', text: 'Check what needs to improve in the structure or the offer.', type: 'builder' },
-      { label: 'C', text: 'Absorb the hit — then work to reclaim my voice.', type: 'creator' },
-      { label: 'D', text: 'Take it more personally than I\'d like to admit.', type: 'connector' },
-      { label: 'E', text: 'Move quickly to the next option to avoid getting stuck.', type: 'hunter' },
+    en: { text: "If you could return to age 12 with one sentence — what would you tell yourself?", options: [
+      { label: 'A', text: "\"Keep asking, even when they laugh\"", type: 'sage' },
+      { label: 'B', text: "\"What you build will hold\"", type: 'builder' },
+      { label: 'C', text: "\"Don't be ashamed of what's different in you\"", type: 'creator' },
+      { label: 'D', text: "\"The people are the treasure\"", type: 'connector' },
+      { label: 'E', text: "\"Dare sooner\"", type: 'hunter' },
     ]},
   },
 
   { id: 22, stage: 3,
-    he: { text: 'יש לך שעתיים של פוקוס נקי. למה אתה משתמש בהן טבעית?', options: [
-      { label: 'א', text: 'לזקק רעיון, לכתוב, להסביר או להבין לעומק.', type: 'sage' },
-      { label: 'ב', text: 'לבנות, לסדר, לתקן או ליצור תהליך.', type: 'builder' },
-      { label: 'ג', text: 'ליצור משהו שאפשר להרגיש — טקסט, תוכן, רעיון, וידאו.', type: 'creator' },
-      { label: 'ד', text: 'לדבר עם אדם נכון, לחבר בין אנשים או לפתוח מרחב.', type: 'connector' },
-      { label: 'ה', text: 'לבדוק הזדמנות, לשלוח הודעות, להשוות אפשרויות או לזוז.', type: 'hunter' },
+    he: { text: "מתי בפעם הראשונה הרגשת שאתה בדיוק במקום הנכון?", options: [
+      { label: 'א', text: "כשמישהו ראה באמת את מה שיצרתי", type: 'creator' },
+      { label: 'ב', text: "בקבוצה, בתנועה, בקהילה", type: 'connector' },
+      { label: 'ג', text: "כשהשגתי משהו לבד, בכוחות עצמי", type: 'hunter' },
+      { label: 'ד', text: "מול מורה שפתח לי עולם", type: 'sage' },
+      { label: 'ה', text: "כשקיבלתי אחריות על משהו אמיתי", type: 'builder' },
     ]},
-    en: { text: 'You have two hours of clean focus. What do you naturally use them for?', options: [
-      { label: 'A', text: 'Distilling an idea, writing, explaining, or understanding something deeply.', type: 'sage' },
-      { label: 'B', text: 'Building, organizing, fixing, or creating a repeatable process.', type: 'builder' },
-      { label: 'C', text: 'Creating something felt — text, content, a concept, a video.', type: 'creator' },
-      { label: 'D', text: 'Talking with the right person, connecting people, or opening a space.', type: 'connector' },
-      { label: 'E', text: 'Scanning an opportunity, sending messages, comparing options, moving.', type: 'hunter' },
+    en: { text: "When did you first feel you were exactly in the right place?", options: [
+      { label: 'A', text: "When someone truly saw what I made", type: 'creator' },
+      { label: 'B', text: "In a group, a movement, a community", type: 'connector' },
+      { label: 'C', text: "When I achieved something on my own", type: 'hunter' },
+      { label: 'D', text: "With a teacher who opened a world for me", type: 'sage' },
+      { label: 'E', text: "When I got responsibility for something real", type: 'builder' },
     ]},
   },
 
   { id: 23, stage: 3,
-    he: { text: 'איזה לחץ גורם לך להיעלם?', options: [
-      { label: 'א', text: 'לחץ לענות מהר לפני שהבנתי באמת.', type: 'sage' },
-      { label: 'ב', text: 'לחץ להוציא משהו כשהוא עדיין מבולגן.', type: 'builder' },
-      { label: 'ג', text: 'לחץ להיות נוכח ומעניין כל הזמן.', type: 'creator' },
-      { label: 'ד', text: 'לחץ רגשי מאנשים שצריכים ממני יותר מדי.', type: 'connector' },
-      { label: 'ה', text: 'לחץ להתחייב למסלול אחד מוקדם מדי.', type: 'hunter' },
+    he: { text: "איזו תקופה בחייך היית רוצה לחיות שוב?", options: [
+      { label: 'א', text: "תקופה של אתגר וסיכון גדול", type: 'hunter' },
+      { label: 'ב', text: "תקופה שלמדתי בה הכי הרבה", type: 'sage' },
+      { label: 'ג', text: "תקופה שבניתי בה משהו מאפס", type: 'builder' },
+      { label: 'ד', text: "תקופה שיצרתי בה בלי הפסקה", type: 'creator' },
+      { label: 'ה', text: "תקופה שהייתי מוקף בה באנשים קרובים", type: 'connector' },
     ]},
-    en: { text: 'What pressure makes you disappear?', options: [
-      { label: 'A', text: 'Pressure to answer quickly before I\'ve truly understood.', type: 'sage' },
-      { label: 'B', text: 'Pressure to release something when it\'s still messy.', type: 'builder' },
-      { label: 'C', text: 'Pressure to be present and interesting all the time.', type: 'creator' },
-      { label: 'D', text: 'Emotional weight from people who need too much from me.', type: 'connector' },
-      { label: 'E', text: 'Pressure to commit to one path too early.', type: 'hunter' },
+    en: { text: "Which period of your life would you live again?", options: [
+      { label: 'A', text: "A time of big challenge and risk", type: 'hunter' },
+      { label: 'B', text: "When I learned the most", type: 'sage' },
+      { label: 'C', text: "When I built something from zero", type: 'builder' },
+      { label: 'D', text: "When I created nonstop", type: 'creator' },
+      { label: 'E', text: "When I was surrounded by close people", type: 'connector' },
     ]},
   },
 
   { id: 24, stage: 3,
-    he: { text: 'מה גורם לך להרגיש כוח שקט?', options: [
-      { label: 'א', text: 'כשאני מבין משהו שאחרים עוד לא ניסחו.', type: 'sage' },
-      { label: 'ב', text: 'כשאני רואה מערכת מתחילה לעבוד בלי דרמה.', type: 'builder' },
-      { label: 'ג', text: 'כשאני אומר משהו אמיתי ומישהו מרגיש את זה.', type: 'creator' },
-      { label: 'ד', text: 'כשנוצר אמון בחדר ואנשים נפתחים.', type: 'connector' },
-      { label: 'ה', text: 'כשאני מזהה תזמון ופועל בזמן.', type: 'hunter' },
+    he: { text: "איזה סיפור על עצמך אתה מספר הכי הרבה פעמים?", options: [
+      { label: 'א', text: "על משהו שתיקנתי כשכולם ויתרו", type: 'builder' },
+      { label: 'ב', text: "על משהו שהמצאתי", type: 'creator' },
+      { label: 'ג', text: "על חבר שעזרתי לו או שעזר לי", type: 'connector' },
+      { label: 'ד', text: "על סיכון שלקחתי והצליח", type: 'hunter' },
+      { label: 'ה', text: "על משהו שהבנתי לפני כולם", type: 'sage' },
     ]},
-    en: { text: 'What gives you a sense of quiet power?', options: [
-      { label: 'A', text: 'When I understand something others haven\'t articulated yet.', type: 'sage' },
-      { label: 'B', text: 'When I see a system beginning to work without drama.', type: 'builder' },
-      { label: 'C', text: 'When I say something true and someone actually feels it.', type: 'creator' },
-      { label: 'D', text: 'When trust forms in a room and people start to open up.', type: 'connector' },
-      { label: 'E', text: 'When I identify the right timing and move in time.', type: 'hunter' },
+    en: { text: "Which story about yourself do you tell most often?", options: [
+      { label: 'A', text: "About something I fixed when everyone gave up", type: 'builder' },
+      { label: 'B', text: "About something I invented", type: 'creator' },
+      { label: 'C', text: "About a friend I helped, or who helped me", type: 'connector' },
+      { label: 'D', text: "About a risk I took that paid off", type: 'hunter' },
+      { label: 'E', text: "About something I understood before everyone", type: 'sage' },
     ]},
   },
 
-  // ── Stage 4 ───────────────────────────────────────────────
-
   { id: 25, stage: 4,
-    he: { text: 'איזה משפט לא נוח כי אולי הוא נכון?', options: [
-      { label: 'א', text: 'אני משתמש בעומק לפעמים כדי לא לצאת החוצה.', type: 'sage' },
-      { label: 'ב', text: 'אני משתמש במקצועיות לפעמים כדי לא להישפט.', type: 'builder' },
-      { label: 'ג', text: 'אני קורא לחוסר עקביות חופש.', type: 'creator' },
-      { label: 'ד', text: 'אני קורא לצורך באישור קשר.', type: 'connector' },
-      { label: 'ה', text: 'אני קורא לבריחה הזדמנות.', type: 'hunter' },
+    he: { text: "במי אתה מקנא בשקט, גם אם לא תודה בזה בקול?", options: [
+      { label: 'א', text: "במי שמוקף באהבה ובקהילה", type: 'connector' },
+      { label: 'ב', text: "במי שהעז לקפוץ, והצליח", type: 'hunter' },
+      { label: 'ג', text: "במי שיודע המון, ואנשים מקשיבים לו", type: 'sage' },
+      { label: 'ד', text: "במי שבנה משהו יציב שעובד", type: 'builder' },
+      { label: 'ה', text: "במי שמתפרנס מהיצירה שלו", type: 'creator' },
     ]},
-    en: { text: 'What uncomfortable sentence might actually be true about you?', options: [
-      { label: 'A', text: 'I use depth sometimes to avoid going public.', type: 'sage' },
-      { label: 'B', text: 'I use professionalism sometimes to avoid being judged.', type: 'builder' },
-      { label: 'C', text: 'I call inconsistency freedom.', type: 'creator' },
-      { label: 'D', text: 'I call needing approval connection.', type: 'connector' },
-      { label: 'E', text: 'I call escape opportunity.', type: 'hunter' },
+    en: { text: "Who do you quietly envy, even if you'd never say it?", options: [
+      { label: 'A', text: "Someone surrounded by love and community", type: 'connector' },
+      { label: 'B', text: "Someone who dared to jump and made it", type: 'hunter' },
+      { label: 'C', text: "Someone who knows a lot and people listen", type: 'sage' },
+      { label: 'D', text: "Someone who built something stable that works", type: 'builder' },
+      { label: 'E', text: "Someone who lives from their creative work", type: 'creator' },
     ]},
   },
 
   { id: 26, stage: 4,
-    he: { text: 'למה נמאס לך לקרוא ״לא מוכן״?', options: [
-      { label: 'א', text: 'למחשבה שכבר ברורה מספיק כדי לבדוק אותה.', type: 'sage' },
-      { label: 'ב', text: 'לגרסה ראשונה שאנשים כבר יכולים להשתמש בה.', type: 'builder' },
-      { label: 'ג', text: 'למסר שמרגיש רגיל רק כי הוא אמיתי.', type: 'creator' },
-      { label: 'ד', text: 'לבקשה נקייה שאני מפחד לבקש.', type: 'connector' },
-      { label: 'ה', text: 'לכיוון לא מושלם אבל חי.', type: 'hunter' },
+    he: { text: "איזו תכונה אצל אחרים מעצבנת אותך יותר ממה שהיא צריכה?", options: [
+      { label: 'א', text: "שטחיות", type: 'sage' },
+      { label: 'ב', text: "חוסר אמינות", type: 'builder' },
+      { label: 'ג', text: "חיקוי", type: 'creator' },
+      { label: 'ד', text: "קרירות", type: 'connector' },
+      { label: 'ה', text: "היסוס", type: 'hunter' },
     ]},
-    en: { text: 'What are you tired of calling \'not ready\'?', options: [
-      { label: 'A', text: 'A thought that\'s already clear enough to test.', type: 'sage' },
-      { label: 'B', text: 'A first version people could already use.', type: 'builder' },
-      { label: 'C', text: 'A message that only feels ordinary because it\'s authentic.', type: 'creator' },
-      { label: 'D', text: 'A clean ask I keep being afraid to make.', type: 'connector' },
-      { label: 'E', text: 'An imperfect but alive direction.', type: 'hunter' },
+    en: { text: "Which trait in others annoys you more than it should?", options: [
+      { label: 'A', text: "Shallowness", type: 'sage' },
+      { label: 'B', text: "Unreliability", type: 'builder' },
+      { label: 'C', text: "Imitation", type: 'creator' },
+      { label: 'D', text: "Coldness", type: 'connector' },
+      { label: 'E', text: "Hesitation", type: 'hunter' },
     ]},
   },
 
   { id: 27, stage: 4,
-    he: { text: 'איפה אתה מבלבל חופש עם הימנעות?', options: [
-      { label: 'א', text: 'כשאני נשאר בלמידה במקום לבחור ניסוח ולצאת.', type: 'sage' },
-      { label: 'ב', text: 'כשאני ממשיך לשפר במקום לתת למציאות להגיב.', type: 'builder' },
-      { label: 'ג', text: 'כשאני מחכה להשראה במקום לחזור על מה שחשוב.', type: 'creator' },
-      { label: 'ד', text: 'כשאני לא מבקש כדי לא להרגיש תלוי.', type: 'connector' },
-      { label: 'ה', text: 'כשאני משאיר הכול פתוח ולכן שום דבר לא מצטבר.', type: 'hunter' },
+    he: { text: "מה אתה דוחה שוב ושוב, למרות שמשהו בך יודע שזה שלך?", options: [
+      { label: 'א', text: "להראות לעולם את מה שאני יוצר", type: 'creator' },
+      { label: 'ב', text: "לבנות קהילה סביב משהו", type: 'connector' },
+      { label: 'ג', text: "לקחת סיכון אמיתי", type: 'hunter' },
+      { label: 'ד', text: "לכתוב או ללמד את מה שאני יודע", type: 'sage' },
+      { label: 'ה', text: "להקים מערכת משלי", type: 'builder' },
     ]},
-    en: { text: 'Where do you confuse freedom with avoidance?', options: [
-      { label: 'A', text: 'When I stay in learning mode instead of choosing a frame and going public.', type: 'sage' },
-      { label: 'B', text: 'When I keep improving instead of letting reality respond.', type: 'builder' },
-      { label: 'C', text: 'When I wait for inspiration instead of repeating what already matters.', type: 'creator' },
-      { label: 'D', text: 'When I don\'t ask because I don\'t want to feel dependent.', type: 'connector' },
-      { label: 'E', text: 'When I leave everything open so nothing ever compounds.', type: 'hunter' },
+    en: { text: "What do you keep postponing, though part of you knows it's yours?", options: [
+      { label: 'A', text: "Showing the world what I make", type: 'creator' },
+      { label: 'B', text: "Building a community around something", type: 'connector' },
+      { label: 'C', text: "Taking a real risk", type: 'hunter' },
+      { label: 'D', text: "Writing or teaching what I know", type: 'sage' },
+      { label: 'E', text: "Setting up a system of my own", type: 'builder' },
     ]},
   },
 
   { id: 28, stage: 4,
-    he: { text: 'מה יהפוך את החיים שלך לכנים יותר תוך 30 יום?', options: [
-      { label: 'א', text: 'לפרסם הסבר אחד לפני שהוא מושלם.', type: 'sage' },
-      { label: 'ב', text: 'להוציא גרסה פשוטה במקום לבנות עוד שכבה.', type: 'builder' },
-      { label: 'ג', text: 'לחזור על מסר אחד גם אחרי שהניצוץ יורד.', type: 'creator' },
-      { label: 'ד', text: 'לבקש עזרה, כסף או מחויבות בלי להתנצל.', type: 'connector' },
-      { label: 'ה', text: 'לבחור מסלול אחד ולמדוד אותו לפני שאני קופץ הלאה.', type: 'hunter' },
+    he: { text: "איזה פחד עוצר אותך הכי הרבה?", options: [
+      { label: 'א', text: "שאפספס את הרגע", type: 'hunter' },
+      { label: 'ב', text: "שיגלו שאני לא יודע מספיק", type: 'sage' },
+      { label: 'ג', text: "שמה שאבנה יקרוס", type: 'builder' },
+      { label: 'ד', text: "שיגידו שזה לא מקורי או לא טוב", type: 'creator' },
+      { label: 'ה', text: "שאאכזב מישהו או שאשאר לבד", type: 'connector' },
     ]},
-    en: { text: 'What would make your life more honest within 30 days?', options: [
-      { label: 'A', text: 'Publishing one explanation before it\'s perfect.', type: 'sage' },
-      { label: 'B', text: 'Shipping a simple version instead of adding another layer.', type: 'builder' },
-      { label: 'C', text: 'Repeating one message even after the initial spark is gone.', type: 'creator' },
-      { label: 'D', text: 'Asking for help, money, or commitment without apologizing.', type: 'connector' },
-      { label: 'E', text: 'Choosing one path and measuring it before jumping elsewhere.', type: 'hunter' },
+    en: { text: "Which fear stops you most?", options: [
+      { label: 'A', text: "That I'll miss the moment", type: 'hunter' },
+      { label: 'B', text: "That they'll find out I don't know enough", type: 'sage' },
+      { label: 'C', text: "That what I build will collapse", type: 'builder' },
+      { label: 'D', text: "That they'll say it's unoriginal or not good", type: 'creator' },
+      { label: 'E', text: "That I'll let someone down or end up alone", type: 'connector' },
     ]},
   },
 
   { id: 29, stage: 4,
-    he: { text: 'מה כדאי שתפסיק להוסיף?', options: [
-      { label: 'א', text: 'עוד הסברים לפני פעולה ראשונה.', type: 'sage' },
-      { label: 'ב', text: 'עוד פיצ׳רים לפני שמישהו השתמש בזה.', type: 'builder' },
-      { label: 'ג', text: 'עוד סגנון לפני שיש מסר עקבי.', type: 'creator' },
-      { label: 'ד', text: 'עוד נתינה לפני שיש גבול או מחיר.', type: 'connector' },
-      { label: 'ה', text: 'עוד אפשרויות לפני שבדקתי אחת עד הסוף.', type: 'hunter' },
+    he: { text: "איזו ביקורת עליך פוגעת הכי הרבה, כי יש בה קצת אמת?", options: [
+      { label: 'א', text: "\"אתה נוקשה\"", type: 'builder' },
+      { label: 'ב', text: "\"אתה לא גומר דברים\"", type: 'creator' },
+      { label: 'ג', text: "\"אתה מרצה את כולם\"", type: 'connector' },
+      { label: 'ד', text: "\"אתה לא מתמיד\"", type: 'hunter' },
+      { label: 'ה', text: "\"אתה חושב יותר מדי ועושה מעט\"", type: 'sage' },
     ]},
-    en: { text: 'What should you stop adding?', options: [
-      { label: 'A', text: 'More explanations before first action.', type: 'sage' },
-      { label: 'B', text: 'More features before anyone has used what\'s already there.', type: 'builder' },
-      { label: 'C', text: 'More style before there\'s a consistent message.', type: 'creator' },
-      { label: 'D', text: 'More giving before there\'s a boundary or a price.', type: 'connector' },
-      { label: 'E', text: 'More options before testing one all the way through.', type: 'hunter' },
+    en: { text: "Which criticism hurts most, because it's partly true?", options: [
+      { label: 'A', text: "\"You're rigid\"", type: 'builder' },
+      { label: 'B', text: "\"You don't finish things\"", type: 'creator' },
+      { label: 'C', text: "\"You try to please everyone\"", type: 'connector' },
+      { label: 'D', text: "\"You don't stick with it\"", type: 'hunter' },
+      { label: 'E', text: "\"You think too much and do too little\"", type: 'sage' },
     ]},
   },
 
   { id: 30, stage: 4,
-    he: { text: 'למה כדאי שתפסיק לחכות?', options: [
-      { label: 'א', text: 'לוודאות מלאה.', type: 'sage' },
-      { label: 'ב', text: 'לגרסה מושלמת.', type: 'builder' },
-      { label: 'ג', text: 'לרגע שבו תמיד יהיה לי חשק.', type: 'creator' },
-      { label: 'ד', text: 'לאישור שכולם איתי.', type: 'connector' },
-      { label: 'ה', text: 'להזדמנות שלא דורשת בחירה.', type: 'hunter' },
+    he: { text: "איזה חלק בך אתה משאיר בבית כשאתה יוצא לעבודה?", options: [
+      { label: 'א', text: "מי שצריך שיאהבו אותו", type: 'connector' },
+      { label: 'ב', text: "מי שרוצה לנצח בכל מחיר", type: 'hunter' },
+      { label: 'ג', text: "מי ששואל שאלות גדולות מדי", type: 'sage' },
+      { label: 'ד', text: "מי שרוצה שליטה מלאה", type: 'builder' },
+      { label: 'ה', text: "מי שרוצה לשבור את הכללים", type: 'creator' },
     ]},
-    en: { text: 'What should you stop waiting for?', options: [
-      { label: 'A', text: 'Full certainty.', type: 'sage' },
-      { label: 'B', text: 'The perfect version.', type: 'builder' },
-      { label: 'C', text: 'A moment when I\'ll always feel like it.', type: 'creator' },
-      { label: 'D', text: 'Everyone\'s approval.', type: 'connector' },
-      { label: 'E', text: 'An opportunity that doesn\'t require choosing.', type: 'hunter' },
+    en: { text: "Which part of you do you leave at home when you go to work?", options: [
+      { label: 'A', text: "The one who needs to be loved", type: 'connector' },
+      { label: 'B', text: "The one who wants to win at any cost", type: 'hunter' },
+      { label: 'C', text: "The one who asks questions too big", type: 'sage' },
+      { label: 'D', text: "The one who wants full control", type: 'builder' },
+      { label: 'E', text: "The one who wants to break the rules", type: 'creator' },
     ]},
   },
 
   { id: 31, stage: 4,
-    he: { text: 'איזו בחירה גם תפחיד אותך וגם תקל עליך?', options: [
-      { label: 'א', text: 'לבחור רעיון אחד ולהסביר אותו בפומבי.', type: 'sage' },
-      { label: 'ב', text: 'להוציא גרסה קטנה ולתת לאנשים להשתמש בה.', type: 'builder' },
-      { label: 'ג', text: 'להיות מזוהה עם נושא אחד לתקופה.', type: 'creator' },
-      { label: 'ד', text: 'להציע לאנשים להיכנס לתהליך בתשלום.', type: 'connector' },
-      { label: 'ה', text: 'לסגור 30 יום על כיוון אחד בלי לברוח.', type: 'hunter' },
+    he: { text: "אם היית יכול למחוק תכונה אחת שלך, איזו?", options: [
+      { label: 'א', text: "ספקנות שמשתקת אותי", type: 'sage' },
+      { label: 'ב', text: "הצורך שהכול יהיה מושלם לפני שמתחילים", type: 'builder' },
+      { label: 'ג', text: "מצבי רוח שעולים ויורדים", type: 'creator' },
+      { label: 'ד', text: "הקושי להגיד לא", type: 'connector' },
+      { label: 'ה', text: "חוסר סבלנות", type: 'hunter' },
     ]},
-    en: { text: 'What choice would both scare you and relieve you?', options: [
-      { label: 'A', text: 'Choosing one idea and explaining it publicly.', type: 'sage' },
-      { label: 'B', text: 'Shipping a small version and letting people actually use it.', type: 'builder' },
-      { label: 'C', text: 'Being identified with one topic for a defined period.', type: 'creator' },
-      { label: 'D', text: 'Inviting people into a paid process.', type: 'connector' },
-      { label: 'E', text: 'Committing to one direction for 30 days without escaping.', type: 'hunter' },
+    en: { text: "If you could erase one trait of yours, which?", options: [
+      { label: 'A', text: "Doubt that paralyzes me", type: 'sage' },
+      { label: 'B', text: "Needing everything perfect before starting", type: 'builder' },
+      { label: 'C', text: "Moods that rise and fall", type: 'creator' },
+      { label: 'D', text: "Struggling to say no", type: 'connector' },
+      { label: 'E', text: "Impatience", type: 'hunter' },
     ]},
   },
 
   { id: 32, stage: 4,
-    he: { text: 'מה אתה כבר יודע, אבל עדיין מתמקח איתו?', options: [
-      { label: 'א', text: 'שאני יודע מספיק כדי להתחיל לבדוק.', type: 'sage' },
-      { label: 'ב', text: 'שזה לא צריך להיות מושלם כדי להיות שימושי.', type: 'builder' },
-      { label: 'ג', text: 'שבלי חזרתיות הקול שלי לא יצטבר.', type: 'creator' },
-      { label: 'ד', text: 'שאמון לא יהפוך להכנסה אם לא אבקש.', type: 'connector' },
-      { label: 'ה', text: 'שחופש יגיע מבחירה, לא מעוד אפשרויות.', type: 'hunter' },
+    he: { text: "מה משהו בך יודע שהוא נכון, אבל עוד לא אמרת בקול?", options: [
+      { label: 'א', text: "שאני יוצר, לא \"גם עושה\"", type: 'creator' },
+      { label: 'ב', text: "שאני צריך אנשים סביבי כדי לפרוח", type: 'connector' },
+      { label: 'ג', text: "שאני רוצה הרבה יותר ממה שיש לי", type: 'hunter' },
+      { label: 'ד', text: "שיש לי מה ללמד", type: 'sage' },
+      { label: 'ה', text: "שאני יכול לבנות משהו גדול", type: 'builder' },
     ]},
-    en: { text: 'What do you already know, but keep negotiating with yourself about?', options: [
-      { label: 'A', text: 'That I know enough to start testing.', type: 'sage' },
-      { label: 'B', text: 'That it doesn\'t need to be perfect to be useful.', type: 'builder' },
-      { label: 'C', text: 'That without consistency, my voice won\'t compound.', type: 'creator' },
-      { label: 'D', text: 'That trust won\'t become income if I don\'t ask.', type: 'connector' },
-      { label: 'E', text: 'That freedom comes from choosing — not from more options.', type: 'hunter' },
+    en: { text: "What does part of you know is true, but you haven't said out loud?", options: [
+      { label: 'A', text: "That I'm a creator, not a hobbyist", type: 'creator' },
+      { label: 'B', text: "That I need people around me to thrive", type: 'connector' },
+      { label: 'C', text: "That I want far more than I have", type: 'hunter' },
+      { label: 'D', text: "That I have something to teach", type: 'sage' },
+      { label: 'E', text: "That I could build something big", type: 'builder' },
     ]},
   },
 
-  // ── Stage 5 (16 questions) ────────────────────────────────
-
   { id: 33, stage: 5,
-    he: { text: 'איזה מסלול אונליין מרגיש הכי פחות מזויף?', options: [
-      { label: 'א', text: 'להסביר, ללמד, לכתוב או למפות בעיה שאנשים באמת מרגישים.', type: 'sage' },
-      { label: 'ב', text: 'לבנות כלי, טמפלט או מערכת שחוסכים זמן וכאב.', type: 'builder' },
-      { label: 'ג', text: 'ליצור תוכן או חוויה סביב קול אישי שאנשים מזהים.', type: 'creator' },
-      { label: 'ד', text: 'להוביל קבוצה, קהילה או תהליך שמבוססים על אמון.', type: 'connector' },
-      { label: 'ה', text: 'לבדוק פערי שוק, לידים, אפיליאייט או הזדמנויות במהירות.', type: 'hunter' },
+    he: { text: "בקבוצה שמנסה לפתור בעיה, איזה תפקיד נופל עליך בלי שבחרת?", options: [
+      { label: 'א', text: "מי שדוחף להחלטה", type: 'hunter' },
+      { label: 'ב', text: "מי ששואל את השאלה הנכונה", type: 'sage' },
+      { label: 'ג', text: "מי שמחלק משימות ומסדר תהליך", type: 'builder' },
+      { label: 'ד', text: "מי שמביא רעיון לא צפוי", type: 'creator' },
+      { label: 'ה', text: "מי שדואג שכולם יישמעו", type: 'connector' },
     ]},
-    en: { text: 'Which online path feels least fake to you?', options: [
-      { label: 'A', text: 'Explaining, teaching, writing, or mapping a problem people genuinely feel.', type: 'sage' },
-      { label: 'B', text: 'Building a tool, template, or system that saves real time and pain.', type: 'builder' },
-      { label: 'C', text: 'Creating content or experiences around a personal voice people recognize.', type: 'creator' },
-      { label: 'D', text: 'Leading a group, community, or process built on trust.', type: 'connector' },
-      { label: 'E', text: 'Testing market gaps, leads, affiliate plays, or opportunities fast.', type: 'hunter' },
+    en: { text: "In a group solving a problem, which role lands on you without choosing?", options: [
+      { label: 'A', text: "The one who pushes for a decision", type: 'hunter' },
+      { label: 'B', text: "The one who asks the right question", type: 'sage' },
+      { label: 'C', text: "The one who splits tasks and sets the process", type: 'builder' },
+      { label: 'D', text: "The one with the unexpected idea", type: 'creator' },
+      { label: 'E', text: "The one who makes sure everyone is heard", type: 'connector' },
     ]},
   },
 
   { id: 34, stage: 5,
-    he: { text: 'איזו הצעה ראשונה תגרום לך גאווה למכור?', options: [
-      { label: 'א', text: 'אבחון, מפה, מדריך או מפגש שמייצר בהירות מיידית.', type: 'sage' },
-      { label: 'ב', text: 'כלי או תהליך שחוסך לאדם עבודה, בלבול או טעויות.', type: 'builder' },
-      { label: 'ג', text: 'סדנה, תוכן או מוצר שמרגישים אישיים ולא משוכפלים.', type: 'creator' },
-      { label: 'ד', text: 'תהליך מונחה שבו אנשים מרגישים מוחזקים באמת.', type: 'connector' },
-      { label: 'ה', text: 'גישה להזדמנות, רשימת לידים, מחקר שוק או בדיקה מהירה.', type: 'hunter' },
+    he: { text: "חבר בא אליך עם בעיה. מה אתה עושה קודם?", options: [
+      { label: 'א', text: "מציע תוכנית מעשית", type: 'builder' },
+      { label: 'ב', text: "מסתכל על זה מזווית אחרת לגמרי", type: 'creator' },
+      { label: 'ג', text: "מקשיב, בלי לתקן", type: 'connector' },
+      { label: 'ד', text: "עוזר לו לפעול עכשיו", type: 'hunter' },
+      { label: 'ה', text: "שואל עד שאני מבין את השורש", type: 'sage' },
     ]},
-    en: { text: 'What kind of first offer would make you feel proud to sell?', options: [
-      { label: 'A', text: 'A diagnostic, map, guide, or session that creates immediate clarity.', type: 'sage' },
-      { label: 'B', text: 'A tool or process that saves someone real work, confusion, or mistakes.', type: 'builder' },
-      { label: 'C', text: 'A workshop, content product, or experience that feels personal and unreplicable.', type: 'creator' },
-      { label: 'D', text: 'A guided process where people genuinely feel held and cared for.', type: 'connector' },
-      { label: 'E', text: 'Access to an opportunity, a lead list, market research, or a fast test.', type: 'hunter' },
+    en: { text: "A friend comes to you with a problem. What do you do first?", options: [
+      { label: 'A', text: "Offer a practical plan", type: 'builder' },
+      { label: 'B', text: "Look at it from a completely different angle", type: 'creator' },
+      { label: 'C', text: "Listen, without fixing", type: 'connector' },
+      { label: 'D', text: "Help him act now", type: 'hunter' },
+      { label: 'E', text: "Ask until I understand the root", type: 'sage' },
     ]},
   },
 
   { id: 35, stage: 5,
-    he: { text: 'איזה קונה תוכל לשרת הכי טוב ראשון?', options: [
-      { label: 'א', text: 'אדם מבולבל שצריך שמישהו יעשה לו סדר בראש.', type: 'sage' },
-      { label: 'ב', text: 'אדם מוצף שצריך כלי ברור כדי לפעול.', type: 'builder' },
-      { label: 'ג', text: 'אדם שמחפש השראה, קול או זהות שהוא מתחבר אליהם.', type: 'creator' },
-      { label: 'ד', text: 'אדם שצריך אמון, ליווי ומרחב לא להישאר לבד.', type: 'connector' },
-      { label: 'ה', text: 'אדם שרוצה לזהות הזדמנות ולזוז מהר יותר.', type: 'hunter' },
+    he: { text: "ויכוח מתחמם סביבך. מה אתה עושה בדרך כלל?", options: [
+      { label: 'א', text: "מרגיע ודואג שאף אחד לא ייפגע", type: 'connector' },
+      { label: 'ב', text: "אומר את דעתי ולא נסוג", type: 'hunter' },
+      { label: 'ג', text: "מנסה להבין מה כל צד באמת אומר", type: 'sage' },
+      { label: 'ד', text: "מחזיר לעובדות ולמה שצריך לקרות", type: 'builder' },
+      { label: 'ה', text: "מכניס הומור או זווית חדשה", type: 'creator' },
     ]},
-    en: { text: 'Who is the first buyer you could serve best?', options: [
-      { label: 'A', text: 'Someone confused who needs clarity — a map to get unstuck.', type: 'sage' },
-      { label: 'B', text: 'Someone overwhelmed who needs one clear tool to start moving.', type: 'builder' },
-      { label: 'C', text: 'Someone looking for inspiration, voice, or identity they can connect with.', type: 'creator' },
-      { label: 'D', text: 'Someone who needs trust, guidance, and the feeling of not being alone.', type: 'connector' },
-      { label: 'E', text: 'Someone who wants to spot an opportunity and move faster.', type: 'hunter' },
+    en: { text: "An argument heats up around you. What do you usually do?", options: [
+      { label: 'A', text: "Calm things so nobody gets hurt", type: 'connector' },
+      { label: 'B', text: "Say my piece and hold my ground", type: 'hunter' },
+      { label: 'C', text: "Try to grasp what each side really means", type: 'sage' },
+      { label: 'D', text: "Bring it back to facts and what needs to happen", type: 'builder' },
+      { label: 'E', text: "Bring humor or a new angle", type: 'creator' },
     ]},
   },
 
   { id: 36, stage: 5,
-    he: { text: 'איזה נכס תוכל לתחזק שנים?', options: [
-      { label: 'א', text: 'גוף ידע: מאמרים, מפות, מדריכים, מחקר או ניוזלטר.', type: 'sage' },
-      { label: 'ב', text: 'ספריית טמפלטים, כלים, תהליכים או אוטומציות.', type: 'builder' },
-      { label: 'ג', text: 'קהל סביב נושא רגשי, סגנון אישי או סיפור מתמשך.', type: 'creator' },
-      { label: 'ד', text: 'קהילה, מעגל, קבוצת עומק או תהליך חוזר.', type: 'connector' },
-      { label: 'ה', text: 'מנוע לידים, הפצה, דילים, מחקר קריפטו או פערי שוק.', type: 'hunter' },
+    he: { text: "מה הכי קשה לך לבקש מאנשים?", options: [
+      { label: 'א', text: "שיקשיבו לי עד הסוף", type: 'sage' },
+      { label: 'ב', text: "עזרה — אני מעדיף לעשות לבד", type: 'builder' },
+      { label: 'ג', text: "משוב כן על מה שיצרתי", type: 'creator' },
+      { label: 'ד', text: "משהו בשביל עצמי", type: 'connector' },
+      { label: 'ה', text: "זמן וסבלנות", type: 'hunter' },
     ]},
-    en: { text: 'What kind of asset could you genuinely maintain for years?', options: [
-      { label: 'A', text: 'A knowledge body: articles, maps, guides, research, or a newsletter.', type: 'sage' },
-      { label: 'B', text: 'A library of templates, tools, processes, or automations.', type: 'builder' },
-      { label: 'C', text: 'An audience built around an emotional theme, personal style, or ongoing story.', type: 'creator' },
-      { label: 'D', text: 'A community, circle, or recurring guided process.', type: 'connector' },
-      { label: 'E', text: 'A lead engine, distribution system, deals flow, or opportunity research.', type: 'hunter' },
+    en: { text: "What's hardest for you to ask of people?", options: [
+      { label: 'A', text: "To hear me out to the end", type: 'sage' },
+      { label: 'B', text: "Help — I'd rather do it myself", type: 'builder' },
+      { label: 'C', text: "Honest feedback on what I made", type: 'creator' },
+      { label: 'D', text: "Something for myself", type: 'connector' },
+      { label: 'E', text: "Time and patience", type: 'hunter' },
     ]},
   },
 
   { id: 37, stage: 5,
-    he: { text: 'מאיזה מסלול עדיף שלא תתחיל?', options: [
-      { label: 'א', text: 'מסלול שדורש ממני ודאות אינסופית לפני כל פעולה.', type: 'sage' },
-      { label: 'ב', text: 'מסלול שבו אבנה חודשים לפני שמישהו ישלם או ישתמש.', type: 'builder' },
-      { label: 'ג', text: 'מסלול שמכריח אותי להיחשף כל יום בלי התאוששות.', type: 'creator' },
-      { label: 'ד', text: 'מסלול שבו כולם מקבלים ממני אנרגיה רגשית בחינם.', type: 'connector' },
-      { label: 'ה', text: 'מסלול שהופך כל רעיון נוצץ להתחלה חדשה.', type: 'hunter' },
+    he: { text: "עם מי אתה הכי נהנה לעבוד?", options: [
+      { label: 'א', text: "עם מקוריים, קצת משוגעים", type: 'creator' },
+      { label: 'ב', text: "עם חמים, שאכפת להם", type: 'connector' },
+      { label: 'ג', text: "עם שאפתנים ומהירים", type: 'hunter' },
+      { label: 'ד', text: "עם חכמים שמאתגרים אותי", type: 'sage' },
+      { label: 'ה', text: "עם אמינים שעומדים בזמנים", type: 'builder' },
     ]},
-    en: { text: 'What path is better not to start from?', options: [
-      { label: 'A', text: 'One that demands infinite certainty before every move.', type: 'sage' },
-      { label: 'B', text: 'One where I\'ll build for months before anyone pays or uses anything.', type: 'builder' },
-      { label: 'C', text: 'One that forces me to perform publicly every single day without recovery.', type: 'creator' },
-      { label: 'D', text: 'One where everyone receives my emotional energy at no cost or boundary.', type: 'connector' },
-      { label: 'E', text: 'One that turns every new idea into a fresh start.', type: 'hunter' },
+    en: { text: "Who do you most enjoy working with?", options: [
+      { label: 'A', text: "Original people, a little crazy", type: 'creator' },
+      { label: 'B', text: "Warm people who care", type: 'connector' },
+      { label: 'C', text: "Ambitious, fast people", type: 'hunter' },
+      { label: 'D', text: "Smart people who challenge me", type: 'sage' },
+      { label: 'E', text: "Reliable people who meet deadlines", type: 'builder' },
     ]},
   },
 
   { id: 38, stage: 5,
-    he: { text: 'אם כסף יגיע דרך תוכן, איזה תוכן לא ירוקן אותך?', options: [
-      { label: 'א', text: 'תוכן שמסביר לעומק ומזקק בלבול אמיתי.', type: 'sage' },
-      { label: 'ב', text: 'תוכן שמראה תהליך, כלי, לפני־אחרי או שיטה.', type: 'builder' },
-      { label: 'ג', text: 'תוכן אישי, חי, עם קול ברור ורגש אמיתי.', type: 'creator' },
-      { label: 'ד', text: 'תוכן שמייצר שיחה, אמון ותחושת יחד.', type: 'connector' },
-      { label: 'ה', text: 'תוכן שמזהה טרנד, הזדמנות או מהלך בזמן אמת.', type: 'hunter' },
+    he: { text: "אדם זר מדבר איתך חצי שעה. מה הוא כנראה יזכור עליך?", options: [
+      { label: 'א', text: "את האנרגיה", type: 'hunter' },
+      { label: 'ב', text: "שאמרתי משהו שגרם לו לחשוב", type: 'sage' },
+      { label: 'ג', text: "שהצעתי לו פתרון מעשי", type: 'builder' },
+      { label: 'ד', text: "שאני שונה ומעניין", type: 'creator' },
+      { label: 'ה', text: "שהרגיש שהקשבתי לו באמת", type: 'connector' },
     ]},
-    en: { text: 'If money came through content, what kind wouldn\'t drain you?', options: [
-      { label: 'A', text: 'Content that explains in depth and distills real confusion.', type: 'sage' },
-      { label: 'B', text: 'Content that shows a process, tool, before-and-after, or method.', type: 'builder' },
-      { label: 'C', text: 'Personal, alive content with a clear voice and authentic emotion.', type: 'creator' },
-      { label: 'D', text: 'Content that creates dialogue, trust, and a sense of being together.', type: 'connector' },
-      { label: 'E', text: 'Content that identifies trends, opportunities, or moves in real time.', type: 'hunter' },
+    en: { text: "A stranger talks with you for half an hour. What will he likely remember about you?", options: [
+      { label: 'A', text: "The energy", type: 'hunter' },
+      { label: 'B', text: "That I said something that made him think", type: 'sage' },
+      { label: 'C', text: "That I offered a practical solution", type: 'builder' },
+      { label: 'D', text: "That I'm different and interesting", type: 'creator' },
+      { label: 'E', text: "That he felt truly heard", type: 'connector' },
     ]},
   },
 
   { id: 39, stage: 5,
-    he: { text: 'אם כסף יגיע דרך השקעות, איזה תפקיד מתאים לך?', options: [
-      { label: 'א', text: 'חוקר שמזקק רעיונות מורכבים לתזה ברורה.', type: 'sage' },
-      { label: 'ב', text: 'בונה תהליך השקעה עקבי עם כללים ומעקב.', type: 'builder' },
-      { label: 'ג', text: 'מסביר ציבורי שהופך למידה לתוכן נגיש.', type: 'creator' },
-      { label: 'ד', text: 'מחנך שעוזר לאחרים להישאר רגועים ולא לפעול מפחד.', type: 'connector' },
-      { label: 'ה', text: 'מחפש סיגנלים שפועל רק עם חוקים קשיחים וניהול סיכון.', type: 'hunter' },
+    he: { text: "צריך מישהו שיוביל. מתי אתה מרגיש הכי טוב להרים יד?", options: [
+      { label: 'א', text: "כשיש תוכנית ברורה", type: 'builder' },
+      { label: 'ב', text: "כשיש חופש לעשות אחרת", type: 'creator' },
+      { label: 'ג', text: "כשחשוב שכולם ירגישו שייכים", type: 'connector' },
+      { label: 'ד', text: "תמיד — תנו לי את ההגה", type: 'hunter' },
+      { label: 'ה', text: "כשאפשר ללמד", type: 'sage' },
     ]},
-    en: { text: 'If money came through investing, which role would fit you?', options: [
-      { label: 'A', text: 'Researcher who distills complex ideas into a clear thesis.', type: 'sage' },
-      { label: 'B', text: 'Process builder who creates consistent rules, tracking, and discipline.', type: 'builder' },
-      { label: 'C', text: 'Public educator who turns learning into accessible, engaging content.', type: 'creator' },
-      { label: 'D', text: 'Coach who helps others stay calm and not act from fear.', type: 'connector' },
-      { label: 'E', text: 'Signal reader who moves only with strict rules and risk management.', type: 'hunter' },
+    en: { text: "Someone needs to lead. When do you feel best raising your hand?", options: [
+      { label: 'A', text: "When there's a clear plan", type: 'builder' },
+      { label: 'B', text: "When there's freedom to do it differently", type: 'creator' },
+      { label: 'C', text: "When everyone needs to feel they belong", type: 'connector' },
+      { label: 'D', text: "Always — give me the wheel", type: 'hunter' },
+      { label: 'E', text: "When I can teach", type: 'sage' },
     ]},
   },
 
   { id: 40, stage: 5,
-    he: { text: 'מה מהלך הכסף הראשון שלך ל־30 יום?', options: [
-      { label: 'א', text: 'להפוך בלבול אחד לנכס ידע קטן בתשלום.', type: 'sage' },
-      { label: 'ב', text: 'לבנות כלי שימושי קטן ולבדוק אם אנשים משלמים עליו.', type: 'builder' },
-      { label: 'ג', text: 'לפרסם נושא אחד בעקביות ולחבר אליו הצעה פשוטה.', type: 'creator' },
-      { label: 'ד', text: 'להזמין 10 אנשים לפיילוט קטן בתשלום.', type: 'connector' },
-      { label: 'ה', text: 'לבדוק הזדמנות צרה אחת עם יעד, חוקים ומדידה.', type: 'hunter' },
+    he: { text: "מה היית רוצה שיגידו עליך בעוד 20 שנה?", options: [
+      { label: 'א', text: "\"הוא קירב בין אנשים\"", type: 'connector' },
+      { label: 'ב', text: "\"הוא העז כשאחרים פחדו\"", type: 'hunter' },
+      { label: 'ג', text: "\"הוא שינה את הדרך שבה חשבנו\"", type: 'sage' },
+      { label: 'ד', text: "\"הוא בנה משהו שעדיין עומד\"", type: 'builder' },
+      { label: 'ה', text: "\"הוא השאיר משהו יפה\"", type: 'creator' },
     ]},
-    en: { text: 'What is your first real money move for the next 30 days?', options: [
-      { label: 'A', text: 'Turn one real confusion into a small paid knowledge asset.', type: 'sage' },
-      { label: 'B', text: 'Build one useful tool or template — then sell it before improving it.', type: 'builder' },
-      { label: 'C', text: 'Publish one topic consistently and attach a simple offer to it.', type: 'creator' },
-      { label: 'D', text: 'Invite 10 people into a small paid pilot.', type: 'connector' },
-      { label: 'E', text: 'Test one narrow opportunity with a target, rules, and measurement.', type: 'hunter' },
-    ]},
-  },
-
-  { id: 41, stage: 5,
-    he: { text: 'איזה סימן יראה לך שאתה במסלול הנכון?', options: [
-      { label: 'א', text: 'אנשים אומרים שהם מבינים את עצמם או את הבעיה טוב יותר.', type: 'sage' },
-      { label: 'ב', text: 'אנשים משתמשים במה שבנית וחוזרים אליו שוב.', type: 'builder' },
-      { label: 'ג', text: 'אנשים מגיבים לקול שלך כאילו הוא אומר משהו שהם הרגישו.', type: 'creator' },
-      { label: 'ד', text: 'אנשים נשארים בקשר כי נוצר אמון אמיתי.', type: 'connector' },
-      { label: 'ה', text: 'אנשים מקבלים ממך סיגנל או פתח פעולה שהם לא ראו לבד.', type: 'hunter' },
-    ]},
-    en: { text: 'What sign would show you that you\'re on the right path?', options: [
-      { label: 'A', text: 'People say they understand themselves or the problem better.', type: 'sage' },
-      { label: 'B', text: 'People use what I built and come back to it.', type: 'builder' },
-      { label: 'C', text: 'People respond to my voice as if it says something they\'d been feeling.', type: 'creator' },
-      { label: 'D', text: 'People stay in touch because real trust was built.', type: 'connector' },
-      { label: 'E', text: 'People get a signal or opening from me that they couldn\'t have seen alone.', type: 'hunter' },
+    en: { text: "What would you want said about you in 20 years?", options: [
+      { label: 'A', text: "\"He brought people together\"", type: 'connector' },
+      { label: 'B', text: "\"He dared when others were afraid\"", type: 'hunter' },
+      { label: 'C', text: "\"He changed how we think\"", type: 'sage' },
+      { label: 'D', text: "\"He built something that still stands\"", type: 'builder' },
+      { label: 'E', text: "\"He left something beautiful\"", type: 'creator' },
     ]},
   },
 
-  { id: 42, stage: 5,
-    he: { text: 'מה יהיה סימן אזהרה שאתה במסלול לא נכון?', options: [
-      { label: 'א', text: 'אני ממשיך ללמוד אבל לא מוציא שום דבר החוצה.', type: 'sage' },
-      { label: 'ב', text: 'אני בונה ובונה בלי שאף אדם אמיתי משתמש בזה.', type: 'builder' },
-      { label: 'ג', text: 'אני חייב לייצר נראות כל הזמן ומרגיש שאני מתרוקן.', type: 'creator' },
-      { label: 'ד', text: 'אני הופך למיכל רגשי של אחרים בלי גבולות או מחיר.', type: 'connector' },
-      { label: 'ה', text: 'אני קופץ בין הזדמנויות ולא נותן לדבר אחד להצטבר.', type: 'hunter' },
+  { id: 41, stage: 6,
+    he: { text: "נשארו לך רק שעתיים פנויות בשבוע. במה תשקיע אותן?", options: [
+      { label: 'א', text: "ללמוד משהו לעומק", type: 'sage' },
+      { label: 'ב', text: "לבנות פרויקט צד", type: 'builder' },
+      { label: 'ג', text: "ליצור, בלי מטרה", type: 'creator' },
+      { label: 'ד', text: "להיות עם אנשים, להתנדב", type: 'connector' },
+      { label: 'ה', text: "לבדוק הזדמנות", type: 'hunter' },
     ]},
-    en: { text: 'What would be a warning sign you\'re on the wrong path?', options: [
-      { label: 'A', text: 'I keep learning but nothing ever goes out.', type: 'sage' },
-      { label: 'B', text: 'I keep building but no real person is actually using any of it.', type: 'builder' },
-      { label: 'C', text: 'I have to perform publicly every day and I\'m running on empty.', type: 'creator' },
-      { label: 'D', text: 'I\'m an emotional container for others with no boundaries and no price.', type: 'connector' },
-      { label: 'E', text: 'I keep jumping between opportunities and nothing compounds.', type: 'hunter' },
-    ]},
-  },
-
-  { id: 43, stage: 5,
-    he: { text: 'איזה סוג הכנסה פסיבית הכי הגיוני להתחיל לבנות?', options: [
-      { label: 'א', text: 'נכס ידע שאפשר למכור שוב ושוב.', type: 'sage' },
-      { label: 'ב', text: 'כלי, טמפלט או מערכת שאנשים משתמשים בהם לבד.', type: 'builder' },
-      { label: 'ג', text: 'תוכן או מוצר סביב קהל שכבר מתחבר לקול שלי.', type: 'creator' },
-      { label: 'ד', text: 'קהילה או מנוי שיש בהם ערך מתמשך.', type: 'connector' },
-      { label: 'ה', text: 'מנוע לידים, הפצה, אפיליאייט או מחקר הזדמנויות.', type: 'hunter' },
-    ]},
-    en: { text: 'What type of passive income makes the most sense to start building?', options: [
-      { label: 'A', text: 'A knowledge asset that can be sold again and again.', type: 'sage' },
-      { label: 'B', text: 'A tool, template, or system people use independently.', type: 'builder' },
-      { label: 'C', text: 'A content product or audience built around a recognized voice.', type: 'creator' },
-      { label: 'D', text: 'A community or subscription with ongoing value.', type: 'connector' },
-      { label: 'E', text: 'A lead engine, distribution, affiliate, or opportunity research system.', type: 'hunter' },
+    en: { text: "You have only two free hours a week. Where do they go?", options: [
+      { label: 'A', text: "Learning something in depth", type: 'sage' },
+      { label: 'B', text: "Building a side project", type: 'builder' },
+      { label: 'C', text: "Creating, with no goal", type: 'creator' },
+      { label: 'D', text: "Being with people, volunteering", type: 'connector' },
+      { label: 'E', text: "Checking out an opportunity", type: 'hunter' },
     ]},
   },
 
-  { id: 44, stage: 5,
-    he: { text: 'איזה שוק יהיה לך הכי טבעי להבין?', options: [
-      { label: 'א', text: 'שוק שבו אנשים מבולבלים וצריכים הסבר טוב.', type: 'sage' },
-      { label: 'ב', text: 'שוק שבו אנשים מוצפים וצריכים פתרון מעשי.', type: 'builder' },
-      { label: 'ג', text: 'שוק שבו אנשים מחפשים קול, השראה או זהות.', type: 'creator' },
-      { label: 'ד', text: 'שוק שבו אנשים צריכים אמון, שייכות וליווי.', type: 'connector' },
-      { label: 'ה', text: 'שוק שבו יש פער, טרנד או הזדמנות שאפשר לבדוק מהר.', type: 'hunter' },
+  { id: 42, stage: 6,
+    he: { text: "שתי הצעות עבודה, אותו שכר בדיוק. איזו תיקח?", options: [
+      { label: 'א', text: "עבודה יצירתית עם חופש", type: 'creator' },
+      { label: 'ב', text: "עבודה עם אנשים ולמענם", type: 'connector' },
+      { label: 'ג', text: "בונוסים לפי ביצועים", type: 'hunter' },
+      { label: 'ד', text: "מחקר או הוראה", type: 'sage' },
+      { label: 'ה', text: "להקים מערכת מאפס", type: 'builder' },
     ]},
-    en: { text: 'What market would be most natural for you to understand?', options: [
-      { label: 'A', text: 'One where people are confused and need good explanations.', type: 'sage' },
-      { label: 'B', text: 'One where people are overwhelmed and need practical solutions.', type: 'builder' },
-      { label: 'C', text: 'One where people seek a voice, inspiration, or identity.', type: 'creator' },
-      { label: 'D', text: 'One where people need trust, belonging, and guidance.', type: 'connector' },
-      { label: 'E', text: 'One with a gap, trend, or opportunity that can be tested quickly.', type: 'hunter' },
-    ]},
-  },
-
-  { id: 45, stage: 5,
-    he: { text: 'אם היית צריך לבחור רק ערוץ אחד לחודש הקרוב, מה היית בוחר?', options: [
-      { label: 'א', text: 'כתיבה עומקית: פוסט, ניוזלטר, מדריך או מאמר.', type: 'sage' },
-      { label: 'ב', text: 'בניית כלי קטן והצגתו לאנשים רלוונטיים.', type: 'builder' },
-      { label: 'ג', text: 'תוכן וידאו/סטורי/פוסט עם קול אישי ברור.', type: 'creator' },
-      { label: 'ד', text: 'שיחות עם אנשים והזמנה לקבוצה או תהליך קטן.', type: 'connector' },
-      { label: 'ה', text: 'בדיקת שוק מהירה: הודעות, הצעות, לידים או מחקר הזדמנות.', type: 'hunter' },
-    ]},
-    en: { text: 'If you had to choose only one channel for the next month, what would you choose?', options: [
-      { label: 'A', text: 'Deep writing: a post, newsletter, guide, or article.', type: 'sage' },
-      { label: 'B', text: 'Building one useful thing and presenting it to relevant people.', type: 'builder' },
-      { label: 'C', text: 'Video, story, or personal-voice content with a clear theme.', type: 'creator' },
-      { label: 'D', text: 'Conversations with people and an invitation into a small group or process.', type: 'connector' },
-      { label: 'E', text: 'Fast market test: messages, offers, leads, or opportunity research.', type: 'hunter' },
+    en: { text: "Two job offers, exactly the same pay. Which do you take?", options: [
+      { label: 'A', text: "Creative work with freedom", type: 'creator' },
+      { label: 'B', text: "Work with and for people", type: 'connector' },
+      { label: 'C', text: "Performance-based bonuses", type: 'hunter' },
+      { label: 'D', text: "Research or teaching", type: 'sage' },
+      { label: 'E', text: "Setting up a system from scratch", type: 'builder' },
     ]},
   },
 
-  { id: 46, stage: 5,
-    he: { text: 'מה המוצר הראשון הכי נכון לבדוק?', options: [
-      { label: 'א', text: 'מפת בהירות או אבחון קצר בתשלום.', type: 'sage' },
-      { label: 'ב', text: 'טמפלט או כלי שימושי עם תוצאה ברורה.', type: 'builder' },
-      { label: 'ג', text: 'סדנה או מוצר תוכן סביב נושא שמרגיש חי.', type: 'creator' },
-      { label: 'ד', text: 'מעגל קטן או תהליך קבוצתי בתשלום.', type: 'connector' },
-      { label: 'ה', text: 'רשימת הזדמנויות, לידים, מחקר קריפטו או בדיקת פער שוק.', type: 'hunter' },
+  { id: 43, stage: 6,
+    he: { text: "על מה הכי קשה לך לוותר?", options: [
+      { label: 'א', text: "על אתגר וצמיחה", type: 'hunter' },
+      { label: 'ב', text: "על זמן לחשוב וללמוד", type: 'sage' },
+      { label: 'ג', text: "על שליטה ויציבות", type: 'builder' },
+      { label: 'ד', text: "על חופש יצירתי", type: 'creator' },
+      { label: 'ה', text: "על האנשים סביבי", type: 'connector' },
     ]},
-    en: { text: 'What\'s the most honest first product to test?', options: [
-      { label: 'A', text: 'A clarity map or short paid diagnostic.', type: 'sage' },
-      { label: 'B', text: 'A template or tool with a clear, tangible result.', type: 'builder' },
-      { label: 'C', text: 'A workshop or content product built around something that feels alive.', type: 'creator' },
-      { label: 'D', text: 'A small paid circle or guided group process.', type: 'connector' },
-      { label: 'E', text: 'An opportunity list, lead research, or market gap test.', type: 'hunter' },
-    ]},
-  },
-
-  { id: 47, stage: 5,
-    he: { text: 'איזה תפקיד עדיף לך לקחת בתחילת הדרך?', options: [
-      { label: 'א', text: 'המפשט: זה שמסביר ומזקק.', type: 'sage' },
-      { label: 'ב', text: 'הבונה: זה שהופך רעיון למערכת.', type: 'builder' },
-      { label: 'ג', text: 'הקול: זה שמושך תשומת לב דרך ביטוי.', type: 'creator' },
-      { label: 'ד', text: 'המחבר: זה שמחזיק אמון ואנשים.', type: 'connector' },
-      { label: 'ה', text: 'הצייד: זה שמוצא פתחים ומניע בדיקות.', type: 'hunter' },
-    ]},
-    en: { text: 'What role is best for you to take at the start?', options: [
-      { label: 'A', text: 'The Clarifier — the one who explains and distills.', type: 'sage' },
-      { label: 'B', text: 'The Builder — the one who turns ideas into working systems.', type: 'builder' },
-      { label: 'C', text: 'The Voice — the one who attracts through authentic expression.', type: 'creator' },
-      { label: 'D', text: 'The Connector — the one who holds trust and people.', type: 'connector' },
-      { label: 'E', text: 'The Scout — the one who finds openings and runs the tests.', type: 'hunter' },
+    en: { text: "What's hardest for you to give up?", options: [
+      { label: 'A', text: "Challenge and growth", type: 'hunter' },
+      { label: 'B', text: "Time to think and learn", type: 'sage' },
+      { label: 'C', text: "Control and stability", type: 'builder' },
+      { label: 'D', text: "Creative freedom", type: 'creator' },
+      { label: 'E', text: "The people around me", type: 'connector' },
     ]},
   },
 
-  { id: 48, stage: 5,
-    he: { text: 'מה המשפט הכי נכון להתחיל ממנו?', options: [
-      { label: 'א', text: 'אני לא צריך לדעת הכול; אני צריך להסביר דבר אחד טוב.', type: 'sage' },
-      { label: 'ב', text: 'אני לא צריך לבנות אימפריה; אני צריך לבנות כלי אחד מועיל.', type: 'builder' },
-      { label: 'ג', text: 'אני לא צריך להיות מושלם; אני צריך להיות חי ועקבי.', type: 'creator' },
-      { label: 'ד', text: 'אני לא צריך להציל את כולם; אני צריך להציע מרחב עם גבול.', type: 'connector' },
-      { label: 'ה', text: 'אני לא צריך לרדוף אחרי הכול; אני צריך לבדוק הזדמנות אחת כמו שצריך.', type: 'hunter' },
+  { id: 44, stage: 6,
+    he: { text: "אם הכסף לא היה משנה — מה היית עושה ביום שני בבוקר?", options: [
+      { label: 'א', text: "בונה ומשפר", type: 'builder' },
+      { label: 'ב', text: "יוצר", type: 'creator' },
+      { label: 'ג', text: "מלווה אנשים", type: 'connector' },
+      { label: 'ד', text: "מקים משהו חדש", type: 'hunter' },
+      { label: 'ה', text: "חוקר ומלמד", type: 'sage' },
     ]},
-    en: { text: 'What\'s the most honest sentence to start from?', options: [
-      { label: 'A', text: 'I don\'t need to know everything — I need to explain one thing well.', type: 'sage' },
-      { label: 'B', text: 'I don\'t need to build an empire — I need to build one useful thing.', type: 'builder' },
-      { label: 'C', text: 'I don\'t need to be perfect — I need to be alive and consistent.', type: 'creator' },
-      { label: 'D', text: 'I don\'t need to save everyone — I need to offer a real space with a real boundary.', type: 'connector' },
-      { label: 'E', text: 'I don\'t need to chase everything — I need to test one opportunity properly.', type: 'hunter' },
-    ]},
-  },
-
-
-  // ── Stage 6 — עומק הדפוס (Pattern Depth) ──────────────
-  // 12 questions designed to surface combo archetype traits.
-  // Questions 49–52 probe Visionary (sage+hunter) patterns.
-  // Questions 53–56 probe Alchemist (sage+creator) patterns.
-  // Questions 57–60 probe Sovereign (builder+connector) patterns.
-
-  { id: 49, stage: 6,
-    he: { text: 'אתה רואה הזדמנות שעוד לא נסתמה. מה קורה אצלך ראשון?', options: [
-      { label: 'א', text: 'אני מנתח לעומק — מה מניע אותה, מה הסיכון האמיתי, מה ההשלכות.', type: 'sage' },
-      { label: 'ב', text: 'אני מתכנן — בונה תהליך ברור להיכנס בצורה מסודרת.', type: 'builder' },
-      { label: 'ג', text: 'אני מספר את הסיפור שלה — כדי לגרום לאחרים לראות מה אני רואה.', type: 'creator' },
-      { label: 'ד', text: 'אני מוצא מי עוד רואה אותה ובונה שיתוף פעולה מוקדם.', type: 'connector' },
-      { label: 'ה', text: 'אני בודק — שולח הצעה, מקבל תגובה, לומד תוך כדי תנועה.', type: 'hunter' },
-    ]},
-    en: { text: 'You see an opportunity that hasn\'t closed yet. What happens first?', options: [
-      { label: 'A', text: 'I analyze deeply — what\'s driving it, what the real risk is, what the implications are.', type: 'sage' },
-      { label: 'B', text: 'I plan — build a clear process to enter in an organized way.', type: 'builder' },
-      { label: 'C', text: 'I tell its story — to make others see what I already see.', type: 'creator' },
-      { label: 'D', text: 'I find others who see it too and build early collaboration.', type: 'connector' },
-      { label: 'E', text: 'I test — send an offer, get a response, learn while moving.', type: 'hunter' },
+    en: { text: "If money didn't matter — what would you do on Monday morning?", options: [
+      { label: 'A', text: "Building and improving", type: 'builder' },
+      { label: 'B', text: "Creating", type: 'creator' },
+      { label: 'C', text: "Accompanying people", type: 'connector' },
+      { label: 'D', text: "Starting something new", type: 'hunter' },
+      { label: 'E', text: "Researching and teaching", type: 'sage' },
     ]},
   },
 
-  { id: 50, stage: 6,
-    he: { text: 'מה גורם לך לדעת שהגיע הזמן לנוע?', options: [
-      { label: 'א', text: 'הבנתי מספיק כדי לזוז בצורה מושכלת — התמונה ברורה לי.', type: 'sage' },
-      { label: 'ב', text: 'יש לי תוכנית ותהליך מוגדר — ידעתי מה הצעד הראשון.', type: 'builder' },
-      { label: 'ג', text: 'משהו מרגיש חי ואמיתי ולא עוד גרסה שלישית של אותו רעיון.', type: 'creator' },
-      { label: 'ד', text: 'האנשים הנכונים מתייצבים ויש ביניהם אמון אמיתי.', type: 'connector' },
-      { label: 'ה', text: 'חשתי שהחלון עומד להיסגר ולא הייתי מוכן לפספס.', type: 'hunter' },
+  { id: 45, stage: 6,
+    he: { text: "קיבלת סכום כסף במתנה, בתנאי שתשקיע אותו בעצמך. על מה?", options: [
+      { label: 'א', text: "מסע או מפגש עם אנשים", type: 'connector' },
+      { label: 'ב', text: "ניסוי עסקי קטן", type: 'hunter' },
+      { label: 'ג', text: "לימודים או קורס עמוק", type: 'sage' },
+      { label: 'ד', text: "ציוד וכלים", type: 'builder' },
+      { label: 'ה', text: "פרויקט יצירה", type: 'creator' },
     ]},
-    en: { text: 'What tells you it\'s time to move?', options: [
-      { label: 'A', text: 'I\'ve understood enough to move intelligently — the picture is clear to me.', type: 'sage' },
-      { label: 'B', text: 'I have a defined plan and process — I know what the first step is.', type: 'builder' },
-      { label: 'C', text: 'Something feels alive and real — not another third version of the same idea.', type: 'creator' },
-      { label: 'D', text: 'The right people are showing up and there\'s genuine trust between them.', type: 'connector' },
-      { label: 'E', text: 'I sensed the window was about to close and wasn\'t willing to miss it.', type: 'hunter' },
-    ]},
-  },
-
-  { id: 51, stage: 6,
-    he: { text: 'מה הכישרון הנסתר שהכי קשה לך לתמחר?', options: [
-      { label: 'א', text: 'היכולת לראות מה מאחורי מה — לזהות את הדפוס בתוך הרעש.', type: 'sage' },
-      { label: 'ב', text: 'היכולת לקחת רעיון עמום ולתרגמו למשהו שעובד ואפשר לשחזר.', type: 'builder' },
-      { label: 'ג', text: 'היכולת ליצור חיבור רגשי ובהירות באותו ביטוי — שניהם יחד.', type: 'creator' },
-      { label: 'ד', text: 'היכולת לגרום לאנשים שונים להרגיש שהם שייכים לאותו מקום.', type: 'connector' },
-      { label: 'ה', text: 'היכולת לחוש מתי להיכנס ומתי להישאר בצד — תזמון.', type: 'hunter' },
-    ]},
-    en: { text: 'What hidden talent is hardest for you to put a price on?', options: [
-      { label: 'A', text: 'The ability to see what\'s behind what — to find the pattern inside the noise.', type: 'sage' },
-      { label: 'B', text: 'The ability to take a vague idea and translate it into something that works and repeats.', type: 'builder' },
-      { label: 'C', text: 'The ability to create emotional connection and clarity in the same expression — both at once.', type: 'creator' },
-      { label: 'D', text: 'The ability to make different people feel they belong to the same place.', type: 'connector' },
-      { label: 'E', text: 'The ability to sense when to enter and when to stay back — timing.', type: 'hunter' },
+    en: { text: "You get money as a gift, on condition you invest it in yourself. On what?", options: [
+      { label: 'A', text: "A journey or gathering with people", type: 'connector' },
+      { label: 'B', text: "A small business experiment", type: 'hunter' },
+      { label: 'C', text: "Deep study or a course", type: 'sage' },
+      { label: 'D', text: "Equipment and tools", type: 'builder' },
+      { label: 'E', text: "A creative project", type: 'creator' },
     ]},
   },
 
-  { id: 52, stage: 6,
-    he: { text: 'כשאתה בעיצומו של פרויקט, מה מרגש אותך יותר מכל?', options: [
-      { label: 'א', text: 'הרגע שהכל מתחבר לתמונה שלמה — ה"אה!" שמרגיש בלתי ניתן לתכנון.', type: 'sage' },
-      { label: 'ב', text: 'הרגע שהמערכת עובדת לבד בלי שאני צריך לדחוף כל שלב.', type: 'builder' },
-      { label: 'ג', text: 'הרגע שהקהל מגיב — כשמרגיש שמה שיצרתי פגע בדיוק.', type: 'creator' },
-      { label: 'ד', text: 'הרגע שהאנשים בתוך הפרויקט מתחילים לבנות ביניהם בלעדי.', type: 'connector' },
-      { label: 'ה', text: 'הרגע שמישהו אומר "כן" — כשאני יודע שתפסתי את הפתח.', type: 'hunter' },
+  { id: 46, stage: 6,
+    he: { text: "מה תהיה הצלחה מבחינתך בעוד שנה?", options: [
+      { label: 'א', text: "שיכירו בי כמי שמבין לעומק", type: 'sage' },
+      { label: 'ב', text: "שיהיה לי משהו יציב שעובד", type: 'builder' },
+      { label: 'ג', text: "שיכירו בקול שלי", type: 'creator' },
+      { label: 'ד', text: "לעבוד עם אנשים שאני אוהב", type: 'connector' },
+      { label: 'ה', text: "קפיצה גדולה קדימה", type: 'hunter' },
     ]},
-    en: { text: 'In the middle of a project, what excites you most?', options: [
-      { label: 'A', text: 'The moment everything connects into a complete picture — the "aha" that can\'t be planned.', type: 'sage' },
-      { label: 'B', text: 'The moment the system runs on its own without me pushing every step.', type: 'builder' },
-      { label: 'C', text: 'The moment the audience responds — when what I made lands exactly right.', type: 'creator' },
-      { label: 'D', text: 'The moment people inside the project start building between themselves, without me.', type: 'connector' },
-      { label: 'E', text: 'The moment someone says "yes" — when I know I caught the opening.', type: 'hunter' },
-    ]},
-  },
-
-  { id: 53, stage: 6,
-    he: { text: 'כשאתה עיבד רעיון לאורך שבועות, מה קורה לו?', options: [
-      { label: 'א', text: 'הוא מתעמק — מוסיפים שכבות, קשרים והבנות שלא היו בהתחלה.', type: 'sage' },
-      { label: 'ב', text: 'הוא מתורגם לתהליך — הופך ממחשבה לדבר שניתן לבנות ולחזור עליו.', type: 'builder' },
-      { label: 'ג', text: 'הוא מקבל קול — צורה, שפה ואופן הצגה שהם שלי לחלוטין.', type: 'creator' },
-      { label: 'ד', text: 'הוא מתחבר לאנשים — אני מבין מי צריך אותו ואיך להגיש אותו.', type: 'connector' },
-      { label: 'ה', text: 'הוא מתחיל להרגיש כבד — אני מעדיף ליישם ולמדוד מאשר להמשיך לעבד.', type: 'hunter' },
-    ]},
-    en: { text: 'When you\'ve been processing an idea for weeks, what happens to it?', options: [
-      { label: 'A', text: 'It deepens — layers, connections, and understandings that weren\'t there at the start.', type: 'sage' },
-      { label: 'B', text: 'It translates — moves from thought to something buildable and repeatable.', type: 'builder' },
-      { label: 'C', text: 'It finds a voice — a form, language, and way of presenting that is entirely mine.', type: 'creator' },
-      { label: 'D', text: 'It connects to people — I understand who needs it and how to present it to them.', type: 'connector' },
-      { label: 'E', text: 'It starts to feel heavy — I\'d rather implement and measure than keep processing.', type: 'hunter' },
+    en: { text: "What would success look like for you a year from now?", options: [
+      { label: 'A', text: "Being recognized as someone who truly understands", type: 'sage' },
+      { label: 'B', text: "Having something stable that works", type: 'builder' },
+      { label: 'C', text: "My voice being recognized", type: 'creator' },
+      { label: 'D', text: "Working with people I love", type: 'connector' },
+      { label: 'E', text: "A big leap forward", type: 'hunter' },
     ]},
   },
 
-  { id: 54, stage: 6,
-    he: { text: 'מה אתה מייצר שאין לו תחליף אמיתי?', options: [
-      { label: 'א', text: 'מסגרת חשיבה שמארגנת עולם שלם סביב רעיון מרכזי אחד.', type: 'sage' },
-      { label: 'ב', text: 'מערכת שפותרת בעיה אמיתית בצורה שאנשים אחרים לא הצליחו לבנות.', type: 'builder' },
-      { label: 'ג', text: 'ביטוי שנוגע — שאנשים שמרים אותו, חוזרים אליו ומשתפים אותו.', type: 'creator' },
-      { label: 'ד', text: 'מרחב שבו אנשים שלא הכירו מוצאים אמון ושייכות.', type: 'connector' },
-      { label: 'ה', text: 'תנועה מדויקת בזמן הנכון — תוצאה שאחרים לא ציפו לה.', type: 'hunter' },
+  { id: 47, stage: 6,
+    he: { text: "החלטה גדולה מולך. על מה אתה סומך בסוף?", options: [
+      { label: 'א', text: "על אינטואיציה ותחושת יופי", type: 'creator' },
+      { label: 'ב', text: "על מה שאומרים אנשים שאני סומך עליהם", type: 'connector' },
+      { label: 'ג', text: "על הבטן, ולזוז מהר", type: 'hunter' },
+      { label: 'ד', text: "על ניתוח ומידע", type: 'sage' },
+      { label: 'ה', text: "על תוכנית וניסיון", type: 'builder' },
     ]},
-    en: { text: 'What do you produce that has no real substitute?', options: [
-      { label: 'A', text: 'A thinking framework that organizes an entire world around one central idea.', type: 'sage' },
-      { label: 'B', text: 'A system that solves a real problem in a way others haven\'t been able to build.', type: 'builder' },
-      { label: 'C', text: 'An expression that touches — that people save, return to, and share.', type: 'creator' },
-      { label: 'D', text: 'A space where people who didn\'t know each other find trust and belonging.', type: 'connector' },
-      { label: 'E', text: 'A precise move at the right time — a result others didn\'t expect.', type: 'hunter' },
-    ]},
-  },
-
-  { id: 55, stage: 6,
-    he: { text: 'מה גורם לך לדעת שעשית עבודה טובה?', options: [
-      { label: 'א', text: 'כשמישהו אמר "לא ידעתי לנסח את זה — ועכשיו יש לי שפה".', type: 'sage' },
-      { label: 'ב', text: 'כשהדבר עובד בלי שאני מדחוף — לבד, שוב ושוב.', type: 'builder' },
-      { label: 'ג', text: 'כשמשהו שיצרתי הגיע לאנשים שלא הכרתי ועשה אותם להרגיש.', type: 'creator' },
-      { label: 'ד', text: 'כשהקשר שבניתי הפך לשיתוף פעולה שחי לעצמו.', type: 'connector' },
-      { label: 'ה', text: 'כשהמספרים מדברים — תפסתי הזדמנות ותרגמתי אותה לתוצאה.', type: 'hunter' },
-    ]},
-    en: { text: 'What makes you know you\'ve done good work?', options: [
-      { label: 'A', text: 'When someone said "I couldn\'t articulate it before — now I have language for it."', type: 'sage' },
-      { label: 'B', text: 'When the thing runs without me pushing — on its own, again and again.', type: 'builder' },
-      { label: 'C', text: 'When something I created reached people I\'d never met and made them feel.', type: 'creator' },
-      { label: 'D', text: 'When the connection I built became a collaboration that lives on its own.', type: 'connector' },
-      { label: 'E', text: 'When the numbers speak — I caught the opportunity and turned it into results.', type: 'hunter' },
+    en: { text: "A big decision is in front of you. What do you trust in the end?", options: [
+      { label: 'A', text: "Intuition and a sense of beauty", type: 'creator' },
+      { label: 'B', text: "What people I trust say", type: 'connector' },
+      { label: 'C', text: "My gut, and moving fast", type: 'hunter' },
+      { label: 'D', text: "Analysis and information", type: 'sage' },
+      { label: 'E', text: "Planning and experience", type: 'builder' },
     ]},
   },
 
-  { id: 56, stage: 6,
-    he: { text: 'מה הנכס הכי חשוב שאתה יכול לבנות?', options: [
-      { label: 'א', text: 'שיטה, מתודולוגיה, או מסגרת שאחרים ירצו לאמץ ולשלם עליה.', type: 'sage' },
-      { label: 'ב', text: 'מוצר, כלי, או תהליך שחוסך זמן ומחיר לאנשים שמשתמשים בו.', type: 'builder' },
-      { label: 'ג', text: 'קטלוג יצירות ובסיס עוקבים שמייצגים את הקול הייחודי שלי.', type: 'creator' },
-      { label: 'ד', text: 'רשת אמון — אנשים שמוציאים זה את זה קדימה ויודעים שהם שייכים.', type: 'connector' },
-      { label: 'ה', text: 'היסטוריית תוצאות שמוכיחה שאני רואה ופועל לפני השוק.', type: 'hunter' },
+  { id: 48, stage: 6,
+    he: { text: "משפט אחד שהיית תולה מעל השולחן שלך:", options: [
+      { label: 'א', text: "\"מי שמעז, מנצח\"", type: 'hunter' },
+      { label: 'ב', text: "\"תבין לפני שתפעל\"", type: 'sage' },
+      { label: 'ג', text: "\"מה שנבנה טוב, מחזיק\"", type: 'builder' },
+      { label: 'ד', text: "\"תעשה את זה בדרך שלך\"", type: 'creator' },
+      { label: 'ה', text: "\"אף אחד לא מגיע לבד\"", type: 'connector' },
     ]},
-    en: { text: 'What\'s the most important asset you could build?', options: [
-      { label: 'A', text: 'A method, methodology, or framework that others will want to adopt and pay for.', type: 'sage' },
-      { label: 'B', text: 'A product, tool, or process that saves time and money for the people who use it.', type: 'builder' },
-      { label: 'C', text: 'A catalog of work and a following that represents my unique voice.', type: 'creator' },
-      { label: 'D', text: 'A trust network — people who move each other forward and know they belong.', type: 'connector' },
-      { label: 'E', text: 'A track record that proves I see and act before the market does.', type: 'hunter' },
-    ]},
-  },
-
-  { id: 57, stage: 6,
-    he: { text: 'מה מרגיש כמו הנחיל האמיתי שלך — הדבר שבאמת שייך לך?', options: [
-      { label: 'א', text: 'ספרייה של ידע ורעיונות שמכווינת אנשים ומפשטת עבורם עולם.', type: 'sage' },
-      { label: 'ב', text: 'מנגנון שמתפקד גם כשאני לא שם — מערכת שמחזיקה את עצמה.', type: 'builder' },
-      { label: 'ג', text: 'קהל שמחפש אותי ספציפית — לא רק את התוכן, אלא אותי.', type: 'creator' },
-      { label: 'ד', text: 'קהילה שסומכת עלי לחבר, לנהל ולהחזיק יחד.', type: 'connector' },
-      { label: 'ה', text: 'ספר כתובות שלא מזדקן — הזדמנויות פתוחות ומגעים חשובים.', type: 'hunter' },
-    ]},
-    en: { text: 'What feels like your real inheritance — the thing that truly belongs to you?', options: [
-      { label: 'A', text: 'A library of knowledge and ideas that guides people and simplifies the world for them.', type: 'sage' },
-      { label: 'B', text: 'A mechanism that functions even when I\'m not there — a system that holds itself.', type: 'builder' },
-      { label: 'C', text: 'An audience that looks for me specifically — not just the content, but me.', type: 'creator' },
-      { label: 'D', text: 'A community that trusts me to connect, manage, and hold together.', type: 'connector' },
-      { label: 'E', text: 'An address book that never ages — open opportunities and important contacts.', type: 'hunter' },
-    ]},
-  },
-
-  { id: 58, stage: 6,
-    he: { text: 'כשאתה בונה משהו, מה השם האמיתי שלו?', options: [
-      { label: 'א', text: 'פלטפורמת ידע שמסדרת את מה שקיים ומציגה אותו בחדות.', type: 'sage' },
-      { label: 'ב', text: 'מנוע — תהליך, מוצר, או מערכת שעושים עבודה לבד.', type: 'builder' },
-      { label: 'ג', text: 'קהל שנבנה סביב הקול שלי — ולא ניתן לשכפל.', type: 'creator' },
-      { label: 'ד', text: 'ארגון חי — מרחב, קהילה, שיתוף פעולה שמתרחש בתוכו.', type: 'connector' },
-      { label: 'ה', text: 'פוזיציה שתפסתי לפני שאחרים ראו אותה.', type: 'hunter' },
-    ]},
-    en: { text: 'When you\'re building something, what\'s its real name?', options: [
-      { label: 'A', text: 'A knowledge platform that organizes what exists and presents it with clarity.', type: 'sage' },
-      { label: 'B', text: 'An engine — a process, product, or system that does the work on its own.', type: 'builder' },
-      { label: 'C', text: 'An audience built around my voice — that can\'t be replicated.', type: 'creator' },
-      { label: 'D', text: 'A living organization — a space, community, collaboration happening inside it.', type: 'connector' },
-      { label: 'E', text: 'A position I captured before others saw it.', type: 'hunter' },
-    ]},
-  },
-
-  { id: 59, stage: 6,
-    he: { text: 'מה תרגיש כשמשהו שבנית ממשיך לגדול בלעדיך?', options: [
-      { label: 'א', text: 'גאווה — הבנה שגיבשתי הפכה לכלי שאחרים מחזיקים.', type: 'sage' },
-      { label: 'ב', text: 'סיפוק — המנוע שבניתי עושה את עבודתו בלי שאצטרך לדחוף.', type: 'builder' },
-      { label: 'ג', text: 'עונג — הקול שלי ממשיך לנגוע בלי שאני נוכח.', type: 'creator' },
-      { label: 'ד', text: 'ריגוש — האנשים שחיברתי ממשיכים לבנות יחד בלעדי.', type: 'connector' },
-      { label: 'ה', text: 'ביטחון — יצאתי בזמן וכבר בדקתי הזדמנות חדשה.', type: 'hunter' },
-    ]},
-    en: { text: 'What will you feel when something you built keeps growing without you?', options: [
-      { label: 'A', text: 'Pride — an understanding I crystallized became a tool others now hold.', type: 'sage' },
-      { label: 'B', text: 'Satisfaction — the engine I built does its work without me needing to push.', type: 'builder' },
-      { label: 'C', text: 'Pleasure — my voice keeps touching people without me being present.', type: 'creator' },
-      { label: 'D', text: 'Excitement — the people I connected keep building together without me.', type: 'connector' },
-      { label: 'E', text: 'Confidence — I exited at the right time and have already tested a new opportunity.', type: 'hunter' },
-    ]},
-  },
-
-  { id: 60, stage: 6,
-    he: { text: 'מה אתה מציע שאחרים לא יכולים לתת?', options: [
-      { label: 'א', text: 'בהירות שמגיעה מהבנה — לא מסיסמאות ולא מניסיון שטחי.', type: 'sage' },
-      { label: 'ב', text: 'מבנה שעובד — לא רק רעיון יפה, אלא מערכת שניתן להפעיל.', type: 'builder' },
-      { label: 'ג', text: 'קול שהוא שלי בלבד — שאי אפשר להעתיק ולא ניתן להחליף.', type: 'creator' },
-      { label: 'ד', text: 'שייכות ואמון — לגרום לאנשים להרגיש בבית בתוך מה שבניתי.', type: 'connector' },
-      { label: 'ה', text: 'עיניים שרואות — הזדמנויות שאחרים עוד לא מזהים.', type: 'hunter' },
-    ]},
-    en: { text: 'What do you offer that others cannot give?', options: [
-      { label: 'A', text: 'Clarity born from understanding — not slogans, not surface-level experience.', type: 'sage' },
-      { label: 'B', text: 'Structure that works — not just a good idea, but a system that can be run.', type: 'creator' },
-      { label: 'C', text: 'A voice that is solely mine — impossible to copy, impossible to replace.', type: 'creator' },
-      { label: 'D', text: 'Belonging and trust — making people feel at home inside what I\'ve built.', type: 'connector' },
-      { label: 'E', text: 'Eyes that see — opportunities others haven\'t identified yet.', type: 'hunter' },
+    en: { text: "One sentence you'd hang above your desk:", options: [
+      { label: 'A', text: "\"Who dares, wins\"", type: 'hunter' },
+      { label: 'B', text: "\"Understand before you act\"", type: 'sage' },
+      { label: 'C', text: "\"What's built well, holds\"", type: 'builder' },
+      { label: 'D', text: "\"Do it your way\"", type: 'creator' },
+      { label: 'E', text: "\"Nobody gets there alone\"", type: 'connector' },
     ]},
   },
 
 ];
+
 export function classifyArchetype(scores) {
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   if (!sorted.length) return 'sage';
@@ -1072,18 +865,24 @@ export function classifyArchetype(scores) {
   return first[0];
 }
 
-// ── Session subset ─────────────────────────────────────────────
-// 48 questions per session (decided May 2026): all of stages 1–4,
-// and the first 8 of stages 5 and 6. Closed answers are scored
-// locally, so the questionnaire stays fast.
-export const SESSION_QUESTIONS = (() => {
-  const perStage = {};
-  return questions.filter(q => {
-    perStage[q.stage] = (perStage[q.stage] ?? 0) + 1;
-    return perStage[q.stage] <= 8;
-  });
-})();
+// All 48 questions are used in every session.
+export const SESSION_QUESTIONS = questions;
 
 // Points (by number of answered closed questions) where one
 // AI-written open question is inserted — roughly 40% and 75%.
 export const OPEN_QUESTION_AT = [19, 36];
+
+// Top type per layer — where layers disagree is a junction worth naming.
+export function layerProfile(answers) {
+  const byStage = {};
+  for (const qu of questions) {
+    const t = answers[qu.id];
+    if (!t) continue;
+    byStage[qu.stage] ??= {};
+    byStage[qu.stage][t] = (byStage[qu.stage][t] ?? 0) + 1;
+  }
+  return Object.entries(byStage).map(([stage, counts]) => {
+    const [top, n] = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+    return { stage: Number(stage), top, strength: n, counts };
+  });
+}

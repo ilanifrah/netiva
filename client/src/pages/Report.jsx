@@ -7,6 +7,7 @@ import { ARCHETYPES } from '../data/archetypes.js';
 import Card from '../components/ui/Card.jsx';
 import Button from '../components/ui/Button.jsx';
 import ParticleField from '../components/ParticleField.jsx';
+import AccuracyRating from '../components/AccuracyRating.jsx';
 
 // ── Markdown renderer ────────────────────────────────────
 
@@ -142,7 +143,7 @@ export default function Report() {
   }
 
   const archetypeData = report ? ARCHETYPES[report.archetype ?? ''] : null;
-  const dir = 'rtl'; // Reports are always Hebrew
+  const dir = language === 'he' ? 'rtl' : 'ltr';
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
@@ -327,6 +328,8 @@ export default function Report() {
                 </div>
               </motion.div>
             )}
+
+            <AccuracyRating language={language} archetype={report.archetype} plan={report.plan} />
 
             {/* Actions */}
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
