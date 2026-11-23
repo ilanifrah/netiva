@@ -56,7 +56,8 @@ ${openLines ? `התשובות הפתוחות שלו, במילים שלו:\n${ope
 4. התאם לגיל, לעיסוק, לניסיון ולשעות הפנויות. עם עד 5 שעות בשבוע, אל תציע מסלול שדורש 30. אם יש ניסיון שכבר שילמו עליו, התחל ממנו.
 5. הצג את הכיוון כהשערה לבדיקה: סיים את הסעיף הראשון ב"בדיקה לשבוע הקרוב", פעולה אחת זולה שתוך 7 ימים תראה אם הכיוון נכון.
 6. אסור: משפטים שמתאימים לכל אדם ("לפעמים אתה מטיל ספק בעצמך"), משפטי מוטיבציה, "אתה אדם ייחודי ומורכב", חזרה על רעיון, הבטחות הכנסה. כל משפט צריך להישען על תשובה שלו.
-7. עברית טבעית ויומיומית בגוף שני זכר, לא תרגום.`;
+7. עברית טבעית ויומיומית בגוף שני זכר, לא תרגום.
+8. עיגון מחקרי לבחירת המקצוע: חמשת הטיפוסים תואמים את מודל ההתעניינות של הולנד (RIASEC), שהוא המודל עם התמיכה המחקרית החזקה ביותר לבחירת תחום עבודה: החכם = Investigative, הבונה = Realistic ו-Conventional, היוצר = Artistic, המחבר = Social, הציד = Enterprising. בחר מקצוע שמתאים לשני הטיפוסים החזקים יחד (קוד הולנד של שתי אותיות), כמו שמסווגים אותו במאגר O*NET, וכתוב במשפט אחד את הקוד ולמה המקצוע מתאים לו.`;
 
   return `
 User profile:
@@ -81,7 +82,8 @@ Accuracy rules — these override any instruction that follows:
 4. Fit the age, occupation, experience and free hours. With up to 5 hours a week, don't propose a path that needs 30. If they have paid experience, start from it.
 5. Present the direction as a hypothesis: end the first section with "Test for this week" — one cheap action that shows within 7 days whether the direction is right.
 6. Forbidden: statements that fit anyone ("at times you doubt yourself"), motivational lines, "you are unique and complex", repetition, income promises. Every sentence must rest on one of their answers.
-7. Plain, natural English.`;
+7. Plain, natural English.
+8. Research anchor for the occupation: the five types map onto Holland's RIASEC interest model, the best-supported model for choosing a field of work: Sage = Investigative, Builder = Realistic and Conventional, Creator = Artistic, Connector = Social, Hunter = Enterprising. Pick an occupation that fits the two strongest types together (a two-letter Holland code), as O*NET classifies it, and state the code and why it fits in one sentence.`;
 }
 
 function buildHebrewPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock }) {
