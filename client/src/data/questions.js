@@ -1,3 +1,4 @@
+import { HOLD_QUESTIONS } from './holding.js';
 // Bilingual question bank — Hebrew + English (rewritten Nov 2026)
 // 48 questions, 8 per layer. Every option is equally attractive (balanced
 // social desirability) and maps to one of five base types. Money and work
@@ -6,8 +7,8 @@
 // Option order is rotated per question so the letters carry no pattern.
 
 export const STAGE_LABELS = {
-  he: { 1: 'מה מושך אותך', 2: 'מה הגוף יודע', 3: 'מאיפה באת', 4: 'הצד המוצל', 5: 'אתה בין אנשים', 6: 'בחירה' },
-  en: { 1: 'What draws you', 2: 'What the body knows', 3: 'Where you came from', 4: 'The shadow side', 5: 'You among others', 6: 'Choice' },
+  he: { 1: 'מה מושך אותך', 2: 'מה הגוף יודע', 3: 'מאיפה באת', 4: 'הצד המוצל', 5: 'אתה בין אנשים', 6: 'מה אתה מחזיק' },
+  en: { 1: 'What draws you', 2: 'What the body knows', 3: 'Where you came from', 4: 'The shadow side', 5: 'You among others', 6: 'What you can sustain' },
 };
 
 // Which school of thought each layer draws on (sent to the report)
@@ -17,7 +18,7 @@ export const LAYER_SOURCES = {
   3: 'Early memories (Adler), narrative identity (McAdams)',
   4: 'Shadow and projection (Jung), parts (IFS)',
   5: 'Group roles, attachment, third-person perspective',
-  6: 'Forced trade-offs under constraint',
+  6: 'Past-behaviour biodata on persistence, delay, exposure, people, autonomy, risk, selling',
 };
 
 // Helper — get localized field
@@ -865,12 +866,13 @@ export function classifyArchetype(scores) {
   return first[0];
 }
 
-// All 48 questions are used in every session.
-export const SESSION_QUESTIONS = questions;
+// Session: layers 1–5 of the archetype bank (40 questions) and then the
+// "what you can sustain" questions, which replaced the old choice layer.
+export const SESSION_QUESTIONS = [...questions.filter(qu => qu.stage !== 6), ...HOLD_QUESTIONS];
 
 // Points (by number of answered closed questions) where one
 // AI-written open question is inserted — roughly 40% and 75%.
-export const OPEN_QUESTION_AT = [19, 36];
+export const OPEN_QUESTION_AT = [16, 32];
 
 // Top type per layer — where layers disagree is a junction worth naming.
 export function layerProfile(answers) {

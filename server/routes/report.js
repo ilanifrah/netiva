@@ -28,7 +28,7 @@ router.get('/:sessionId', async (req, res, next) => {
 // POST /api/report/free-generate
 router.post('/free-generate', async (req, res, next) => {
   try {
-    const { sessionId, archetypeKey, scores, name, plan, profile, qa, openAnswers, layers, language } = req.body;
+    const { sessionId, archetypeKey, scores, name, plan, profile, qa, openAnswers, layers, language, matches } = req.body;
 
     if (!archetypeKey) {
       return res.status(400).json({ error: 'archetypeKey is required' });
@@ -54,6 +54,7 @@ router.post('/free-generate', async (req, res, next) => {
       qa:       Array.isArray(qa) ? qa.slice(0, 60) : [],
       openAnswers: Array.isArray(openAnswers) ? openAnswers.slice(0, 4) : [],
       layers:   Array.isArray(layers) ? layers.slice(0, 6) : [],
+      matches:  matches && Array.isArray(matches.top) ? { top: matches.top.slice(0, 3), eliminated: (matches.eliminated || []).slice(0, 3) } : null,
     });
 
     console.log(`[free-generate] done (${content.length} chars)`);

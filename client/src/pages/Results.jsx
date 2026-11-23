@@ -6,6 +6,7 @@ import { useQuiz } from '../context/QuizContext.jsx';
 import { T } from '../data/translations.js';
 import { ARCHETYPES } from '../data/archetypes.js';
 import { questions as QUESTIONS } from '../data/questions.js';
+import { matchPayload, explainElimination } from '../data/match.js';
 import ParticleField from '../components/ParticleField.jsx';
 import Button from '../components/ui/Button.jsx';
 import Card from '../components/ui/Card.jsx';
@@ -77,7 +78,7 @@ export default function Results() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const { language } = useLanguage();
-  const { archetype, sessionId, scores, userName, email, answers, plan, profile, openAnswers, answerTexts, layers } = useQuiz();
+  const { archetype, sessionId, scores, userName, email, answers, plan, profile, openAnswers, answerTexts, layers, matches } = useQuiz();
   const s = T[language];
 
   const [revealed, setRevealed]     = useState(false);
@@ -126,6 +127,7 @@ export default function Results() {
           qa:          answerTexts(language),
           layers:      layers(language),
           openAnswers: openAnswers || [],
+          matches:     matchPayload(matches(), answers, language),
         }),
       });
       const data = await res.json();
@@ -220,6 +222,54 @@ export default function Results() {
 
         {revealed && (
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+
+            {/* ── Matched paths: ranked, and what was ruled out ── */}
+            {(() => {
+              const m = matches();
+              if (!m.top.length) return null;
+              const he = language === 'he';
+              const nm = p => p[language] ?? p.he;
+              return (
+                <Card glow style={{ marginBottom: '24px', padding: '24px', textAlign: he ? 'right' : 'left' }} dir={he ? 'rtl' : 'ltr'}>
+                  <p style={{ color: 'var(--gold-400)', fontSize: '0.78rem', letterSpacing: '0.12em', marginBottom: '14px' }}>
+                    {he ? 'המסלולים שהכי סביר שיחזיקו אצלך' : 'The paths most likely to hold for you'}
+                  </p>
+                  {m.top[0].score < 0.7 && (
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.6, marginBottom: '14px' }}>
+                      {he ? 'אף מסלול בספרייה לא מתאים לך בחוזקה. אלה הקרובים ביותר, ושווה לבדוק אותם בזהירות.' : 'No path in the library fits you strongly. These are the closest, worth testing carefully.'}
+                    </p>
+                  )}
+                  {m.top.map((r, i) => (
+                    <div key={r.path.id} style={{ marginBottom: '14px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', fontWeight: i === 0 ? 700 : 500, color: i === 0 ? 'var(--text-primary)' : 'var(--text-secondary)', fontSize: i === 0 ? '1.08rem' : '0.95rem' }}>
+                        <span>{i + 1}. {nm(r.path)}</span>
+                        <span style={{ color: 'var(--text-muted)', fontWeight: 400, fontSize: '0.8rem', whiteSpace: 'nowrap' }}>
+                          {he ? `כ־${r.path.months} ח׳ עד הכנסה` : `~${r.path.months} mo to income`}
+                        </span>
+                      </div>
+                      {r.path.note && (
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '4px' }}>⚠ {r.path.note[language] ?? r.path.note.he}</p>
+                      )}
+                    </div>
+                  ))}
+                  {m.eliminated.length > 0 && (
+                    <>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.78rem', letterSpacing: '0.12em', margin: '20px 0 10px' }}>
+                        {he ? 'מושך אותך, אבל כנראה לא יחזיק' : 'Draws you, but probably will not hold'}
+                      </p>
+                      {m.eliminated.map(r => (
+                        <div key={r.path.id} style={{ marginBottom: '12px' }}>
+                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', textDecoration: 'line-through', opacity: 0.8 }}>{nm(r.path)}</div>
+                          {explainElimination(r, answers, language).map((line, k) => (
+                            <p key={k} style={{ color: 'var(--text-muted)', fontSize: '0.84rem', lineHeight: 1.6 }}>{line}</p>
+                          ))}
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </Card>
+              );
+            })()}
 
             {/* ── Description card ───────────────────────── */}
             <Card glow style={{ marginBottom: '24px', textAlign: language === 'he' ? 'right' : 'left' }} dir={language === 'he' ? 'rtl' : 'ltr'}>

@@ -16,7 +16,18 @@ const TYPE_NAMES = {
   en: { sage: 'Sage', builder: 'Builder', creator: 'Creator', connector: 'Connector', hunter: 'Hunter' },
 };
 
-function buildPersonalBlock({ profile, qa, openAnswers, layers, language }) {
+function formatMatches(matches, he) {
+  if (!matches || !Array.isArray(matches.top) || !matches.top.length) return '';
+  const top = matches.top.map((m, i) => he
+    ? `${i + 1}. ${m.name} — התאמה ${m.fit}/100, כ־${m.months} חודשים עד הכנסה ראשונה, לפחות ${m.hours} שעות בשבוע${m.weakSpots?.length ? `. נקודות תורפה: ${m.weakSpots.join(', ')}` : ''}${m.note ? `. אילוץ חוקי: ${m.note}` : ''}`
+    : `${i + 1}. ${m.name} — fit ${m.fit}/100, about ${m.months} months to first income, at least ${m.hours} hours a week${m.weakSpots?.length ? `. Weak spots: ${m.weakSpots.join(', ')}` : ''}${m.note ? `. Legal constraint: ${m.note}` : ''}`).join('\n');
+  const out = (matches.eliminated || []).map(m => `• ${m.name}: ${(m.reasons || []).join(' ')}`).join('\n');
+  return he
+    ? `\nמנוע ההתאמה (מחושב מהתשובות, לא לשנות): קודם נפסלו מסלולים שהוא כנראה לא יחזיק בהם, ואז דורגו השאר לפי מה שמושך אותו כפול מה שהוא מסוגל להחזיק.\nהמסלולים המובילים:\n${top}\n${out ? `מסלולים שמושכים אותו אבל נפסלו:\n${out}` : ''}\n`
+    : `\nMatching engine (computed from the answers, do not change): paths the person is unlikely to sustain were ruled out first, then the rest ranked by what draws them times what they can sustain.\nTop paths:\n${top}\n${out ? `Paths that draw them but were ruled out:\n${out}` : ''}\n`;
+}
+
+function buildPersonalBlock({ profile, qa, openAnswers, layers, language, matches }) {
   const he = language !== 'en';
   const names = he ? TYPE_NAMES.he : TYPE_NAMES.en;
   const p = profile || {};
@@ -33,6 +44,20 @@ function buildPersonalBlock({ profile, qa, openAnswers, layers, language }) {
     .map(l => `• ${l.layer}: ${names[l.top] || l.top} (${l.strength}/8)`)
     .join('\n');
 
+  const matchBlock = formatMatches(matches, he);
+  const matchRulesHe = matchBlock ? `
+9. הכיוון בסעיף "## הכיוון שלך" הוא המסלול הראשון ממנוע ההתאמה, מחודד לנישה מעשית אחת לפי הניסיון והעיסוק שלו. אל תמציא מסלול אחר. כלל 8 משמש כאן רק כדי להסביר למה המסלול הזה מתאים לו, וכלל 5 מוחלף בכלל 12.
+10. אחריו: "## שני כיוונים נוספים" — המסלולים 2 ו־3, משפט או שניים לכל אחד, כולל נקודת התורפה שלו בכל מסלול.
+11. "## מה נפסל ולמה" — המסלולים שנפסלו, עם הסיבה ועם התשובה שלו שהובילה לפסילה. בלי לרכך. אם יש אילוץ חוקי במסלול מוביל, כתוב אותו במפורש.
+12. "## ניסוי של 10 דקות" — לכל אחד משני המסלולים הראשונים, משימה אחת שאפשר לעשות עכשיו בעשר דקות, שמדמה את לב העבודה (לא "תחקור את התחום"), ומה לשים לב אליו בגוף ובראש תוך כדי. זה מחליף את "בדיקה לשבוע הקרוב".
+13. אם ציון ההתאמה של המסלול הראשון מתחת ל־70, אמור במפורש שההתאמה חלשה, ושהניסוי של 10 הדקות חשוב במיוחד.` : '';
+  const matchRulesEn = matchBlock ? `
+9. The "## Your direction" section is the first path from the matching engine, sharpened into one practical niche from their experience and occupation. Do not invent another path. Rule 8 is used here only to explain why this path fits, and rule 5 is replaced by rule 12.
+10. Then "## Two more directions" — paths 2 and 3, a sentence or two each, including their weak spot on each.
+11. "## What was ruled out and why" — the eliminated paths with the reason and the answer that led to it. Do not soften. If a top path has a legal constraint, state it explicitly.
+12. "## A 10-minute trial" — for each of the first two paths, one task they can do right now in ten minutes that simulates the core of the work (not "research the field"), and what to notice in body and mind while doing it. This replaces the 7-day test.
+13. If the first path's fit is below 70, say plainly that the fit is weak and that the 10-minute trial matters even more.` : '';
+
   if (he) return `
 פרופיל המשתמש:
 • גיל: ${p.age || na}
@@ -40,7 +65,7 @@ function buildPersonalBlock({ profile, qa, openAnswers, layers, language }) {
 • ניסיון או כישרון שכבר שילמו לו עליו: ${p.experience || na}
 • שעות פנויות בשבוע: ${p.hours || na}
 
-השאלון בנוי משש שכבות, כל אחת ניגשת מזווית אחרת: זרימה, הגוף, זיכרון מוקדם, הצל, האדם בין אנשים, ובחירה תחת אילוץ.
+השאלון בנוי משש שכבות: חמש שכבות של מה שמושך אותו (זרימה, הגוף, זיכרון מוקדם, הצל, האדם בין אנשים), ושכבה של מה שהוא מסוגל להחזיק לאורך זמן, שנמדדת בשאלות על התנהגות בעבר.
 הטיפוס החזק בכל שכבה:
 ${layerLines || 'לא נשלח'}
 
@@ -57,7 +82,8 @@ ${openLines ? `התשובות הפתוחות שלו, במילים שלו:\n${ope
 5. הצג את הכיוון כהשערה לבדיקה: סיים את הסעיף הראשון ב"בדיקה לשבוע הקרוב", פעולה אחת זולה שתוך 7 ימים תראה אם הכיוון נכון.
 6. אסור: משפטים שמתאימים לכל אדם ("לפעמים אתה מטיל ספק בעצמך"), משפטי מוטיבציה, "אתה אדם ייחודי ומורכב", חזרה על רעיון, הבטחות הכנסה. כל משפט צריך להישען על תשובה שלו.
 7. עברית טבעית ויומיומית בגוף שני זכר, לא תרגום.
-8. עיגון מחקרי לבחירת המקצוע: חמשת הטיפוסים תואמים את מודל ההתעניינות של הולנד (RIASEC), שהוא המודל עם התמיכה המחקרית החזקה ביותר לבחירת תחום עבודה: החכם = Investigative, הבונה = Realistic ו-Conventional, היוצר = Artistic, המחבר = Social, הציד = Enterprising. בחר מקצוע שמתאים לשני הטיפוסים החזקים יחד (קוד הולנד של שתי אותיות), כמו שמסווגים אותו במאגר O*NET, וכתוב במשפט אחד את הקוד ולמה המקצוע מתאים לו.`;
+8. עיגון מחקרי לבחירת המקצוע: חמשת הטיפוסים תואמים את מודל ההתעניינות של הולנד (RIASEC), שהוא המודל עם התמיכה המחקרית החזקה ביותר לבחירת תחום עבודה: החכם = Investigative, הבונה = Realistic ו-Conventional, היוצר = Artistic, המחבר = Social, הציד = Enterprising. בחר מקצוע שמתאים לשני הטיפוסים החזקים יחד (קוד הולנד של שתי אותיות), כמו שמסווגים אותו במאגר O*NET, וכתוב במשפט אחד את הקוד ולמה המקצוע מתאים לו.${matchRulesHe}
+${matchBlock}`;
 
   return `
 User profile:
@@ -66,7 +92,7 @@ User profile:
 • Experience people have already paid for: ${p.experience || na}
 • Free hours per week: ${p.hours || na}
 
-The questionnaire has six layers, each from a different angle: flow, the body, early memory, the shadow, the person among others, and choice under constraint.
+The questionnaire has six layers: five on what draws the person (flow, the body, early memory, the shadow, the person among others), and one on what they can sustain over time, measured through past behaviour.
 Strongest type per layer:
 ${layerLines || 'not sent'}
 
@@ -83,7 +109,8 @@ Accuracy rules — these override any instruction that follows:
 5. Present the direction as a hypothesis: end the first section with "Test for this week" — one cheap action that shows within 7 days whether the direction is right.
 6. Forbidden: statements that fit anyone ("at times you doubt yourself"), motivational lines, "you are unique and complex", repetition, income promises. Every sentence must rest on one of their answers.
 7. Plain, natural English.
-8. Research anchor for the occupation: the five types map onto Holland's RIASEC interest model, the best-supported model for choosing a field of work: Sage = Investigative, Builder = Realistic and Conventional, Creator = Artistic, Connector = Social, Hunter = Enterprising. Pick an occupation that fits the two strongest types together (a two-letter Holland code), as O*NET classifies it, and state the code and why it fits in one sentence.`;
+8. Research anchor for the occupation: the five types map onto Holland's RIASEC interest model, the best-supported model for choosing a field of work: Sage = Investigative, Builder = Realistic and Conventional, Creator = Artistic, Connector = Social, Hunter = Enterprising. Pick an occupation that fits the two strongest types together (a two-letter Holland code), as O*NET classifies it, and state the code and why it fits in one sentence.${matchRulesEn}
+${matchBlock}`;
 }
 
 function buildHebrewPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock }) {
@@ -307,7 +334,7 @@ ${nameRef}[3–4 sentences. Core psychological pattern and how it shows up in on
 [One sentence. One action doable today. The most important sentence in this report.]`;
 }
 
-function buildPrompt({ plan, archetype, scores, language, name, profile, qa, openAnswers, layers }) {
+function buildPrompt({ plan, archetype, scores, language, name, profile, qa, openAnswers, layers, matches }) {
   const isHe = language === 'he';
   const archetypeName = isHe ? archetype.name_he : archetype.name_en;
   const tagline       = isHe ? archetype.tagline_he : archetype.tagline_en;
@@ -321,16 +348,18 @@ function buildPrompt({ plan, archetype, scores, language, name, profile, qa, ope
           ).join('\n\n')}`)
     : '';
 
-  const personal = buildPersonalBlock({ profile, qa, openAnswers, layers, language });
+  const personal = buildPersonalBlock({ profile, qa, openAnswers, layers, language, matches });
+  // With matching-engine paths, the generic per-archetype path list would compete with them.
+  const pathsBlock = matches?.top?.length ? '' : incomePathsBlock;
 
   if (isHe) {
-    return buildHebrewPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock: incomePathsBlock + '\n' + personal });
+    return buildHebrewPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock: pathsBlock + '\n' + personal });
   }
-  return buildEnglishPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock: incomePathsBlock + '\n' + personal });
+  return buildEnglishPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock: pathsBlock + '\n' + personal });
 }
 
-export async function generateReport({ plan, archetype, scores, language, name, profile, qa, openAnswers, layers }) {
-  const prompt = buildPrompt({ plan, archetype, scores, language, name, profile, qa, openAnswers, layers });
+export async function generateReport({ plan, archetype, scores, language, name, profile, qa, openAnswers, layers, matches }) {
+  const prompt = buildPrompt({ plan, archetype, scores, language, name, profile, qa, openAnswers, layers, matches });
 
   const maxTokens = plan === 'premium' ? 4000 : plan === 'advanced' ? 2500 : 1200;
 

@@ -1,5 +1,10 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { SESSION_QUESTIONS as QUESTIONS, classifyArchetype, STAGE_LABELS, layerProfile } from '../data/questions.js';
+import { holdProfile } from '../data/holding.js';
+import { matchPaths, matchPayload } from '../data/match.js';
+
+// Holding answers look like 'persist:2' and never count toward archetype scores.
+const isBase = t => typeof t === 'string' && !t.includes(':');
 
 const QuizContext = createContext(null);
 
@@ -34,7 +39,7 @@ export function QuizProvider({ children }) {
   // All functional updates — no captured state in closure, so no stale closure risk
   const answerQuestion = useCallback((questionId, optionType) => {
     setAnswers(prev => ({ ...prev, [questionId]: optionType }));
-    setScores(prev => ({ ...prev, [optionType]: (prev[optionType] ?? 0) + 1 }));
+    if (isBase(optionType)) setScores(prev => ({ ...prev, [optionType]: (prev[optionType] ?? 0) + 1 }));
     setCurrentIndex(prev => prev + 1);
   }, []);
 
@@ -48,7 +53,7 @@ export function QuizProvider({ children }) {
       const prevQuestion = QUESTIONS[prev - 1];
       setAnswers(ans => {
         const prevAnswer = ans[prevQuestion.id];
-        if (prevAnswer) {
+        if (prevAnswer && isBase(prevAnswer)) {
           setScores(sc => ({ ...sc, [prevAnswer]: Math.max(0, (sc[prevAnswer] ?? 0) - 1) }));
         }
         const next = { ...ans };
@@ -77,6 +82,10 @@ export function QuizProvider({ children }) {
     return layerProfile(answers).map(l => ({ ...l, layer: (STAGE_LABELS[lang] ?? STAGE_LABELS.he)[l.stage] }));
   }, [answers]);
 
+  const hold = useCallback(() => holdProfile(answers), [answers]);
+  const matches = useCallback(() => matchPaths({ scores, hold: holdProfile(answers), hoursText: profile.hours }), [answers, scores, profile]);
+  const matchesFor = useCallback((lang = 'he') => matchPayload(matchPaths({ scores, hold: holdProfile(answers), hoursText: profile.hours }), answers, lang), [answers, scores, profile]);
+
   function reset() {
     setCurrentIndex(0);
     setAnswers({});
@@ -96,7 +105,7 @@ export function QuizProvider({ children }) {
       plan, setPlan,
       profile, setProfile,
       openAnswers, addOpenAnswer,
-      answerTexts, layers,
+      answerTexts, layers, hold, matches, matchesFor,
       completed,
       answerQuestion, goBack, reset,
     }}>
