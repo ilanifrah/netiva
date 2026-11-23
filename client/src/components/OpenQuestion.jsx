@@ -8,11 +8,11 @@ import Button from './ui/Button.jsx';
 const FALLBACK = {
   he: [
     'ספר על פעם אחת שעבדת על משהו ושכחת את הזמן. מה בדיוק עשית?',
-    'מה הדבר שהכי מפחיד אותך בכסף, ומה היית עושה אם הפחד הזה לא היה קיים?',
+    'מה אתה ממשיך לעשות בשביל אחרים בלי שמבקשים, כי אתה פשוט לא מסוגל שלא?',
   ],
   en: [
     'Describe one time you worked on something and lost track of time. What exactly were you doing?',
-    'What scares you most about money, and what would you do if that fear were gone?',
+    'What do you keep doing for others without being asked, because you simply cannot not do it?',
   ],
 };
 

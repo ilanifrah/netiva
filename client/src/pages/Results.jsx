@@ -228,6 +228,38 @@ export default function Results() {
               </p>
             </Card>
 
+            {/* ── Layers: what each part of the questionnaire showed ── */}
+            {(() => {
+              const ls = layers(language);
+              if (!ls.length) return null;
+              const main = BASE_TYPES.reduce((a, b) => ((scores[b] || 0) > (scores[a] || 0) ? b : a), BASE_TYPES[0]);
+              const name = k => ARCHETYPES[k]?.[language]?.name ?? k;
+              const off = ls.filter(l => l.top !== main && l.strength >= 3);
+              const he = language === 'he';
+              return (
+                <Card style={{ marginBottom: '24px', padding: '24px', textAlign: he ? 'right' : 'left' }} dir={he ? 'rtl' : 'ltr'}>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.72rem', letterSpacing: '0.18em', marginBottom: '16px', textAlign: 'center' }}>
+                    {he ? 'מה עלה בכל שכבה' : 'What each layer showed'}
+                  </p>
+                  {ls.map(l => (
+                    <div key={l.stage} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', marginBottom: '8px', color: l.top === main ? 'var(--text-secondary)' : 'var(--gold-400)' }}>
+                      <span>{l.layer}</span>
+                      <span>{name(l.top)} · {l.strength}/8</span>
+                    </div>
+                  ))}
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.7, marginTop: '14px' }}>
+                    {off.length
+                      ? (he
+                          ? `הצומת שלך: ב${off.map(l => `"${l.layer}"`).join(' וב')} עולה ${off.map(l => name(l.top)).join(' / ')}, לא ${name(main)}. כאן התשובות שלך לא מסכימות זו עם זו, ושם בדרך כלל נמצא מה שלא אומרים בקול. הדוח המלא מפרק את הצומת הזה.`
+                          : `Your junction: in ${off.map(l => `"${l.layer}"`).join(' and ')} the answers point to ${off.map(l => name(l.top)).join(' / ')}, not ${name(main)}. This is where your answers disagree with each other. The full report unpacks it.`)
+                      : (he
+                          ? `כל השכבות מצביעות על ${name(main)}. זה פרופיל עקבי במיוחד.`
+                          : `Every layer points to ${name(main)}. This is an unusually consistent profile.`)}
+                  </p>
+                </Card>
+              );
+            })()}
+
             {/* ── Score breakdown bars ────────────────────── */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
