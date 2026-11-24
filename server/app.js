@@ -46,6 +46,22 @@ app.use('/api/payment',   paymentRouter);
 app.use('/api/analytics', analyticsRouter);
 app.use('/api/diagnostic', diagnosticRouter);
 
+// Probe: one tiny model call per model, returns only status and error text (never the key).
+app.get('/api/health/ai', async (_req, res) => {
+  const { default: Anthropic } = await import('@anthropic-ai/sdk');
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const out = {};
+  for (const model of ['claude-haiku-5-5', 'claude-sonnet-5-5']) {
+    try {
+      const r = await client.messages.create({ model, max_tokens: 5, messages: [{ role: 'user', content: 'hi' }] });
+      out[model] = 'ok:' + (r.content?.[0]?.text ?? '').slice(0, 20);
+    } catch (e) {
+      out[model] = `error ${e.status ?? ''}: ${String(e.message).slice(0, 200)}`;
+    }
+  }
+  res.json(out);
+});
+
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
