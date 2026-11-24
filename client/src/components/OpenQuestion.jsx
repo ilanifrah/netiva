@@ -31,7 +31,7 @@ export default function OpenQuestion({ index, language, profile, answerTexts, on
   useEffect(() => {
     let done = false;
     const fallback = (FALLBACK[language] ?? FALLBACK.he)[index] ?? FALLBACK.he[0];
-    const timer = setTimeout(() => { if (!done) { done = true; setQuestion(fallback); } }, 9000);
+    const timer = setTimeout(() => { if (!done) { done = true; setQuestion(fallback); } }, 15000);
 
     fetch('/api/diagnostic/open-question', {
       method: 'POST',

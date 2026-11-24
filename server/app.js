@@ -52,9 +52,10 @@ app.get('/api/health/ai', async (_req, res) => {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const out = {};
   for (const model of ['claude-haiku-5-5', 'claude-sonnet-5-5']) {
+    const t0 = Date.now();
     try {
       const r = await client.messages.create({ model, max_tokens: 5, messages: [{ role: 'user', content: 'hi' }] });
-      out[model] = 'ok:' + (r.content?.[0]?.text ?? '').slice(0, 20);
+      out[model] = `ok ${Date.now() - t0}ms`;
     } catch (e) {
       out[model] = `error ${e.status ?? ''}: ${String(e.message).slice(0, 200)}`;
     }
