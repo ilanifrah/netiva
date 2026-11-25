@@ -4,6 +4,9 @@ import Anthropic from '@anthropic-ai/sdk';
 
 const router = express.Router();
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+// Newer models can return non-text blocks first; join every text block.
+const textOf = r => (r?.content || []).filter(b => b.type === 'text').map(b => b.text).join('').trim();
+
 
 const GOOGLE_SHEETS_WEBHOOK = 'https://script.google.com/macros/s/AKfycbzbcpw9bt2FUX6AljDeNVlLyBzfl8K6wTNNTPv38M69uA38Z-vgvnktLH14prZvNNhj/exec';
 
@@ -69,7 +72,7 @@ ${questionCount >= 20 ? 'ניתן להסיק מסקנה אם הביטחון גב
       messages: [{ role: 'user', content: userMessage }]
     });
 
-    const raw = response.content[0].text.trim();
+    const raw = textOf(response);
     const clean = raw.replace(/```json|```/g, '').trim();
     const result = JSON.parse(clean);
 
@@ -118,10 +121,10 @@ Return only the question.`;
 
     const response = await client.messages.create({
       model: 'claude-haiku-5-5',
-      max_tokens: 120,
+      max_tokens: 400,
       messages: [{ role: 'user', content: prompt }],
     });
-    const question = (response.content?.[0]?.text || '').trim().replace(/^["'״]+|["'״]+$/g, '');
+    const question = textOf(response).replace(/^["'״]+|["'״]+$/g, '');
     if (!question) return res.status(502).json({ error: 'empty' });
     res.json({ question });
   } catch (err) {
@@ -158,7 +161,7 @@ ${answers.map((a, i) => `${i+1}. ש: ${a.question}\nת: ${a.answer}`).join('\n\n
       messages: [{ role: 'user', content: prompt }]
     });
 
-    const report = response.content[0].text;
+    const report = textOf(response);
 
     logSession({ sessionId, userName, userEmail, plan, archetype, scores, spiralLevel, language: language || 'he', questionCount: answers.length, answers, completionTime: new Date().toISOString() }).catch(console.error);
 

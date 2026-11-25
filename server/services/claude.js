@@ -1,6 +1,9 @@
 import Anthropic from '@anthropic-ai/sdk';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+// Newer models can return non-text blocks first; join every text block.
+const textOf = r => (r?.content || []).filter(b => b.type === 'text').map(b => b.text).join('').trim();
+
 const MODEL = 'claude-sonnet-5-5';
 
 function formatIncomePaths(paths) {
@@ -370,5 +373,5 @@ export async function generateReport({ plan, archetype, scores, language, name, 
     system: 'אתה Oracle — מנוע אבחון פסיכולוגי מדויק. אף פעם לא משתמש בשבחים ריקים או בשפה מוטיבציונית גנרית. מנתח דפוסים ישירות ונותן כיוון ספציפי ופעולות ניתנות לביצוע. You are Oracle — a precise, psychologically sophisticated diagnostic engine. You never use empty praise or generic motivational language. You name patterns honestly and give specific, actionable direction.',
   });
 
-  return message.content[0].text;
+  return textOf(message);
 }
