@@ -125,7 +125,7 @@ Return only the question.`;
       messages: [{ role: 'user', content: prompt }],
     });
     const question = textOf(response).replace(/^["'״]+|["'״]+$/g, '');
-    if (!question) return res.status(502).json({ error: 'empty' });
+    if (!question) return res.status(502).json({ error: 'empty', stop: response.stop_reason, blocks: (response.content || []).map(b => b.type), usage: response.usage });
     res.json({ question });
   } catch (err) {
     console.error('[diagnostic/open-question]', err.message);
