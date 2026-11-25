@@ -364,12 +364,13 @@ function buildPrompt({ plan, archetype, scores, language, name, profile, qa, ope
 export async function generateReport({ plan, archetype, scores, language, name, profile, qa, openAnswers, layers, matches }) {
   const prompt = buildPrompt({ plan, archetype, scores, language, name, profile, qa, openAnswers, layers, matches });
 
-  const maxTokens = plan === 'premium' ? 4000 : plan === 'advanced' ? 2500 : 1200;
+  // Includes room for adaptive thinking on top of the report text.
+  const maxTokens = plan === 'premium' ? 16000 : plan === 'advanced' ? 12000 : 8000;
 
   const message = await client.messages.create({
-    // These models think by default; thinking can use the whole token budget
-    // and leave no text, so it is turned off for these short, direct outputs.
-    thinking: { type: 'disabled' },
+    // Sonnet/Haiku 5.5 think by default and max_tokens covers thinking + text;
+    // low effort keeps thinking short so the answer always fits.
+    output_config: { effort: 'low' },
     model: MODEL,
     max_tokens: maxTokens,
     messages: [{ role: 'user', content: prompt }],
