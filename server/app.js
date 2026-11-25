@@ -95,4 +95,15 @@ app.get('/api/health/ai', async (_req, res) => {
   res.json(out);
 });
 
+
+// Exercises the open-question route end to end with a sample body.
+app.get('/api/health/oq', async (req, res) => {
+  const body = { index: 0, language: 'he', profile: { age: '25–34', occupation: 'מנהל משמרת', experience: 'עיצוב', hours: '10–20 שעות' },
+    answers: [{ layer: 'מה מושך אותך', question: 'שאלה', answer: 'תשובה', type: 'creator' }] };
+  try {
+    const r = await fetch(`https://${req.get('host')}/api/diagnostic/open-question`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    res.json({ status: r.status, body: (await r.text()).slice(0, 500) });
+  } catch (e) { res.json({ fetchError: String(e.message) }); }
+});
+
 export default app;

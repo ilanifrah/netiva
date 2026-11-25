@@ -126,7 +126,7 @@ Return only the question.`;
     res.json({ question });
   } catch (err) {
     console.error('[diagnostic/open-question]', err.message);
-    res.status(500).json({ error: 'failed' });
+    res.status(500).json({ error: 'failed', detail: String(err.message).slice(0, 300) });
   }
 });
 
