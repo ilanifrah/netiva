@@ -76,26 +76,6 @@ app.get('/api/health', (_req, res) => {
 });
 
 // ── Error handler ──────────────────────────────────────────
-app.use(errorHandler);
-
-
-// Live check of the Anthropic key and models. Returns status only, never the key.
-app.get('/api/health/ai', async (_req, res) => {
-  const { default: Anthropic } = await import('@anthropic-ai/sdk');
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const out = { keyPrefix: (process.env.ANTHROPIC_API_KEY || '').slice(0, 10) };
-  for (const model of ['claude-haiku-5-5', 'claude-sonnet-5-5']) {
-    try {
-      await client.messages.create({ model, max_tokens: 5, messages: [{ role: 'user', content: 'hi' }] });
-      out[model] = 'ok';
-    } catch (e) {
-      out[model] = `${e.status || ''} ${String(e.message).slice(0, 200)}`;
-    }
-  }
-  res.json(out);
-});
-
-
 // Exercises the open-question route end to end with a sample body.
 app.get('/api/health/oq', async (req, res) => {
   const body = { index: 0, language: 'he', profile: { age: '25–34', occupation: 'מנהל משמרת', experience: 'עיצוב', hours: '10–20 שעות' },
@@ -105,5 +85,8 @@ app.get('/api/health/oq', async (req, res) => {
     res.json({ status: r.status, body: (await r.text()).slice(0, 500) });
   } catch (e) { res.json({ fetchError: String(e.message) }); }
 });
+
+
+app.use(errorHandler);
 
 export default app;
