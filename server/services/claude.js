@@ -367,6 +367,9 @@ export async function generateReport({ plan, archetype, scores, language, name, 
   const maxTokens = plan === 'premium' ? 4000 : plan === 'advanced' ? 2500 : 1200;
 
   const message = await client.messages.create({
+    // These models think by default; thinking can use the whole token budget
+    // and leave no text, so it is turned off for these short, direct outputs.
+    thinking: { type: 'disabled' },
     model: MODEL,
     max_tokens: maxTokens,
     messages: [{ role: 'user', content: prompt }],

@@ -66,6 +66,9 @@ ${questionCount >= 20 ? 'ניתן להסיק מסקנה אם הביטחון גב
 `;
 
     const response = await client.messages.create({
+      // These models think by default; thinking can use the whole token budget
+      // and leave no text, so it is turned off for these short, direct outputs.
+      thinking: { type: 'disabled' },
       model: 'claude-sonnet-5-5',
       max_tokens: 1024,
       system: DIAGNOSTIC_SYSTEM_PROMPT,
@@ -120,6 +123,9 @@ Rules: natural second person, max 25 words, about a concrete experience ("Tell m
 Return only the question.`;
 
     const response = await client.messages.create({
+      // These models think by default; thinking can use the whole token budget
+      // and leave no text, so it is turned off for these short, direct outputs.
+      thinking: { type: 'disabled' },
       model: 'claude-haiku-5-5',
       max_tokens: 400,
       messages: [{ role: 'user', content: prompt }],
@@ -156,6 +162,9 @@ ${answers.map((a, i) => `${i+1}. ש: ${a.question}\nת: ${a.answer}`).join('\n\n
 `;
 
     const response = await client.messages.create({
+      // These models think by default; thinking can use the whole token budget
+      // and leave no text, so it is turned off for these short, direct outputs.
+      thinking: { type: 'disabled' },
       model: 'claude-sonnet-5-5',
       max_tokens: 2000,
       messages: [{ role: 'user', content: prompt }]
