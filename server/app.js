@@ -78,4 +78,21 @@ app.get('/api/health', (_req, res) => {
 // ── Error handler ──────────────────────────────────────────
 app.use(errorHandler);
 
+
+// Live check of the Anthropic key and models. Returns status only, never the key.
+app.get('/api/health/ai', async (_req, res) => {
+  const { default: Anthropic } = await import('@anthropic-ai/sdk');
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const out = { keyPrefix: (process.env.ANTHROPIC_API_KEY || '').slice(0, 10) };
+  for (const model of ['claude-haiku-5-5', 'claude-sonnet-5-5']) {
+    try {
+      await client.messages.create({ model, max_tokens: 5, messages: [{ role: 'user', content: 'hi' }] });
+      out[model] = 'ok';
+    } catch (e) {
+      out[model] = `${e.status || ''} ${String(e.message).slice(0, 200)}`;
+    }
+  }
+  res.json(out);
+});
+
 export default app;
