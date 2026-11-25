@@ -18,7 +18,7 @@ const HE_SCORE_LABELS = {
   connector: 'המחבר', hunter: 'הצייד',
 };
 
-function fireAnalytics({ archetypeKey, scores, language, answers, name, email, plan }) {
+function fireAnalytics({ archetypeKey, scores, language, answers, name, email, plan, topPath }) {
   try {
     const now = new Date();
     const pad = n => String(n).padStart(2, '0');
@@ -57,7 +57,10 @@ function fireAnalytics({ archetypeKey, scores, language, answers, name, email, p
         email:  email || null,
         plan:   plan || null,
         archetype: archetypeName,
-        scores: heScores,
+        scores: { ...scores, ...heScores },
+        ...Object.fromEntries(Object.entries(scores).map(([k, v]) => [`ציון ${(HE_SCORE_LABELS[k] ?? k).replace(/^ה/, '')}`, v])),
+        ...Object.fromEntries(Object.entries(scores).map(([k, v]) => [(HE_SCORE_LABELS[k] ?? k).replace(/^ה/, ''), v])),
+        topPath: topPath || null,
         language: language === 'he' ? 'עברית' : 'English',
         completionMinutes,
         answers: answerLabels,
@@ -91,7 +94,7 @@ export default function Results() {
   }, []);
 
   useEffect(() => {
-    if (archetypeKey) fireAnalytics({ archetypeKey, scores, language, answers, name: userName, email, plan });
+    if (archetypeKey) fireAnalytics({ archetypeKey, scores, language, answers, name: userName, email, plan, topPath: (() => { try { return matches()?.top?.[0]?.path?.he ?? null; } catch { return null; } })() });
   }, []);
 
   const archetypeKey  = archetype;
@@ -366,7 +369,7 @@ export default function Results() {
             </motion.div>
 
             {/* ── Key traits ─────────────────────────────── */}
-            {info.firstMove && (
+            {info.firstMove && !(matches()?.top?.length) && (
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -410,8 +413,8 @@ export default function Results() {
             >
               <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '16px' }}>
                 {language === 'he'
-                  ? 'הדוח המלא כולל ניתוח עמוק, 5 נתיבי הכנסה ותוכנית 30 יום'
-                  : 'Full report includes deep analysis, 5 income paths, and a 30-day plan'}
+                  ? 'הדוח המלא מחדד את הכיוון לנישה אחת, מסביר מה נפסל ולמה, ונותן ניסוי של 10 דקות לכל מסלול'
+                  : 'The full report sharpens the direction into one niche, explains what was ruled out and why, and gives a 10-minute trial per path'}
               </p>
               <Button
                 variant="gold"

@@ -46,23 +46,6 @@ app.use('/api/payment',   paymentRouter);
 app.use('/api/analytics', analyticsRouter);
 app.use('/api/diagnostic', diagnosticRouter);
 
-// Probe: one tiny model call per model, returns only status and error text (never the key).
-app.get('/api/health/ai', async (_req, res) => {
-  const { default: Anthropic } = await import('@anthropic-ai/sdk');
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const out = {};
-  for (const model of ['claude-haiku-5-5', 'claude-sonnet-5-5']) {
-    const t0 = Date.now();
-    try {
-      const r = await client.messages.create({ model, max_tokens: 5, messages: [{ role: 'user', content: 'hi' }] });
-      out[model] = `ok ${Date.now() - t0}ms`;
-    } catch (e) {
-      out[model] = `error ${e.status ?? ''}: ${String(e.message).slice(0, 200)}`;
-    }
-  }
-  res.json(out);
-});
-
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
@@ -75,18 +58,7 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
-// ── Error handler ──────────────────────────────────────────
-// Exercises the open-question route end to end with a sample body.
-app.get('/api/health/oq', async (req, res) => {
-  const body = { index: 0, language: 'he', profile: { age: '25–34', occupation: 'מנהל משמרת', experience: 'עיצוב', hours: '10–20 שעות' },
-    answers: [{ layer: 'מה מושך אותך', question: 'שאלה', answer: 'תשובה', type: 'creator' }] };
-  try {
-    const r = await fetch(`https://${req.get('host')}/api/diagnostic/open-question`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
-    res.json({ status: r.status, body: (await r.text()).slice(0, 500) });
-  } catch (e) { res.json({ fetchError: String(e.message) }); }
-});
-
-
+// ── Error handler (must stay last) ─────────────────────────
 app.use(errorHandler);
 
 export default app;

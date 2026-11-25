@@ -71,7 +71,7 @@ router.post('/free-generate', async (req, res, next) => {
       });
     }
 
-    res.json({ content, archetypeKey, plan: 'premium' });
+    res.json({ content, archetypeKey, plan: resolvedPlan });
   } catch (err) {
     console.error('[free-generate] error:', err.message);
     next(err);

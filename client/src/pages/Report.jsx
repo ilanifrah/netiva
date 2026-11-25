@@ -213,7 +213,7 @@ export default function Report() {
             </Card>
 
             {/* Income paths section */}
-            {archetypeData?.onlineIncomePaths && (
+            {archetypeData?.onlineIncomePaths && !/##\s*(הכיוון שלך|Your direction)/.test(report.content || '') && (
               <motion.div
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}

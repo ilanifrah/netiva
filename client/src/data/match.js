@@ -46,7 +46,8 @@ export function matchPaths({ scores = {}, hold = {}, hoursText = '' }) {
 
 // Plain-language reason lines, with the person's own answer as evidence.
 export function explainElimination(row, answers, lang = 'he') {
-  return row.reasons.map(r => {
+  const ordered = [...row.reasons].sort((a, b) => (a.kind === 'hours' ? -1 : 0) - (b.kind === 'hours' ? -1 : 0) || (b.gap ?? 0) - (a.gap ?? 0));
+  return ordered.slice(0, 2).map(r => {
     if (r.kind === 'hours') {
       return lang === 'he'
         ? `צריך בערך ${r.need} שעות בשבוע כדי שיזוז, ויש לך כ־${r.have}.`
