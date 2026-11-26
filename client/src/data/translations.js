@@ -9,7 +9,7 @@ export const T = {
     continueEnglish: 'Continue in English',
 
     // Nav / brand
-    brandName: 'Oracle',
+    brandName: 'נתיבה',
     brandTagline: 'גלה את נתיב הכסף שלך',
 
     // Landing
@@ -17,8 +17,8 @@ export const T = {
     heroSubtitle: '50 שאלות. 5 שכבות משיכה ושכבת החזקה. כיוון אחד שמתאים לך.',
     heroCtaPrimary: 'התחל את המבדק',
     heroCtaSecondary: 'למד עוד',
-    aboutTitle: 'על Oracle',
-    aboutText: 'Oracle הוא מנוע אבחון פסיכולוגי שחושף את הנתיב הייחודי שלך ליצירת הכנסה מקוונת. לא עוד עצות גנריות — רק תובנות שמדויקות לך.',
+    aboutTitle: 'על נתיבה',
+    aboutText: 'נתיבה היא מנוע אבחון פסיכולוגי שחושף את הנתיב הייחודי שלך ליצירת הכנסה מקוונת. לא עוד עצות גנריות — רק תובנות שמדויקות לך.',
     plansTitle: 'בחר את העומק שלך',
     howTitle: 'איך זה עובד',
     howStep1: 'ענה על 50 שאלות',
@@ -80,7 +80,7 @@ export const T = {
 
     // Report
     reportTitle: 'הדוח האישי שלך',
-    reportLoading: 'Oracle מנתח את הפרופיל שלך...',
+    reportLoading: 'נתיבה מנתחת את הפרופיל שלך...',
     reportError: 'לא ניתן לטעון את הדוח',
     reportRetry: 'נסה שנית',
     downloadReport: 'הורד דוח',
@@ -116,7 +116,7 @@ export const T = {
     continueEnglish: 'Continue in English',
 
     // Nav / brand
-    brandName: 'Oracle',
+    brandName: 'Netiva',
     brandTagline: 'Discover your money path',
 
     // Landing
@@ -124,8 +124,8 @@ export const T = {
     heroSubtitle: '50 questions. 5 layers of pull and one of staying power. One direction that fits.',
     heroCtaPrimary: 'Start the Assessment',
     heroCtaSecondary: 'Learn More',
-    aboutTitle: 'About Oracle',
-    aboutText: 'Oracle is a psychological diagnostic engine that reveals your unique path to generating online income. No more generic advice — only insights that are precise to you.',
+    aboutTitle: 'About Netiva',
+    aboutText: 'Netiva is a psychological diagnostic engine that reveals your unique path to generating online income. No more generic advice — only insights that are precise to you.',
     plansTitle: 'Choose Your Depth',
     howTitle: 'How It Works',
     howStep1: 'Answer 50 questions',
@@ -187,7 +187,7 @@ export const T = {
 
     // Report
     reportTitle: 'Your Personal Report',
-    reportLoading: 'Oracle is analyzing your profile...',
+    reportLoading: 'Netiva is analyzing your profile...',
     reportError: 'Unable to load report',
     reportRetry: 'Try Again',
     downloadReport: 'Download Report',

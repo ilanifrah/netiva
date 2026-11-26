@@ -5,7 +5,7 @@ const CONTENT = {
   he: {
     title: 'תנאי שימוש ופרטיות',
     sections: [
-      ['מה זה ORACLE', 'אבחון שמציע כיוון לבדיקה בתחום ההכנסה, על סמך התשובות שלך. הוא לא טיפול פסיכולוגי, לא ייעוץ פיננסי או תעסוקתי, ולא מבטיח הכנסה. ההחלטות שלך הן באחריותך.'],
+      ['מה זה נתיבה', 'אבחון שמציע כיוון לבדיקה בתחום ההכנסה, על סמך התשובות שלך. הוא לא טיפול פסיכולוגי, לא ייעוץ פיננסי או תעסוקתי, ולא מבטיח הכנסה. ההחלטות שלך הן באחריותך.'],
       ['מה אנחנו אוספים', 'שם, אימייל, פרטי הפרופיל (גיל, עיסוק, ניסיון, שעות פנויות), התשובות לשאלון, והדירוג שאתה נותן לדוח.'],
       ['למה', 'כדי לכתוב לך את הדוח, ולשפר את דיוק האבחון לאורך זמן.'],
       ['מי מעבד את המידע', 'התשובות נשלחות לשירות הבינה המלאכותית של Anthropic לצורך כתיבת הדוח. הנתונים נשמרים בגיליון Google ובמסד נתונים של Supabase.'],
@@ -17,7 +17,7 @@ const CONTENT = {
   en: {
     title: 'Terms & Privacy',
     sections: [
-      ['What ORACLE is', 'A diagnostic that suggests a direction to test for income, based on your answers. It is not therapy, not financial or career advice, and does not promise income. Your decisions are your own.'],
+      ['What Netiva is', 'A diagnostic that suggests a direction to test for income, based on your answers. It is not therapy, not financial or career advice, and does not promise income. Your decisions are your own.'],
       ['What we collect', 'Name, email, profile details (age, occupation, experience, free hours), your answers, and the rating you give the report.'],
       ['Why', 'To write your report, and to improve the diagnostic\'s accuracy over time.'],
       ['Who processes it', 'Your answers are sent to Anthropic\'s AI service to write the report. Data is stored in a Google Sheet and a Supabase database.'],

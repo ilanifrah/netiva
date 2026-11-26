@@ -340,7 +340,7 @@ export default function Report() {
                   const url  = URL.createObjectURL(blob);
                   const a    = document.createElement('a');
                   a.href = url;
-                  a.download = 'oracle-report.txt';
+                  a.download = 'netiva-report.txt';
                   a.click();
                   URL.revokeObjectURL(url);
                 }}

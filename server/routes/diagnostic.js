@@ -11,7 +11,7 @@ const textOf = r => (r?.content || []).filter(b => b.type === 'text').map(b => b
 const GOOGLE_SHEETS_WEBHOOK = 'https://script.google.com/macros/s/AKfycbzbcpw9bt2FUX6AljDeNVlLyBzfl8K6wTNNTPv38M69uA38Z-vgvnktLH14prZvNNhj/exec';
 
 const DIAGNOSTIC_SYSTEM_PROMPT = `
-אתה מנוע האבחון של ORACLE.
+אתה מנוע האבחון של נתיבה.
 תפקידך לנהל שיחה אבחונית דינמית ואדפטיבית.
 
 8 ארכיטיפים לזיהוי:
@@ -150,7 +150,7 @@ router.post('/generate-report', async (req, res) => {
     };
 
     const prompt = `
-אתה ORACLE. צור דוח אישי ${depthMap[plan] || depthMap.basis} עבור ${userName || 'המשתמש'}.
+אתה מנוע האבחון של נתיבה. צור דוח אישי ${depthMap[plan] || depthMap.basis} עבור ${userName || 'המשתמש'}.
 ארכיטיפ: ${archetype}
 רמת ספירל: ${spiralLevel}
 ציונים: ${JSON.stringify(scores)}

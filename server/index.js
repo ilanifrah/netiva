@@ -3,5 +3,5 @@ import app from './app.js';
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
-  console.log(`\n🔮 Oracle server running on http://localhost:${PORT}\n`);
+  console.log(`\n🔮 Netiva server running on http://localhost:${PORT}\n`);
 });

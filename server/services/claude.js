@@ -119,7 +119,7 @@ ${matchBlock}`;
 function buildHebrewPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock }) {
   const nameRef = name ? `${name}, ` : '';
 
-  const base = `אתה Oracle — מנוע אבחון פסיכולוגי חד, ישיר ומדויק המתמחה בנתיבי יצירת הכנסה מקוונת.
+  const base = `אתה נתיבה — מנוע אבחון פסיכולוגי חד, ישיר ומדויק המתמחה בנתיבי יצירת הכנסה מקוונת.
 המשתמש השלים מבדק אבחוני מקיף.${name ? `\nשם: ${name}` : ''}
 ארכיטיפ: ${archetypeName} — ${tagline}
 ציוני גלם: ${JSON.stringify(scores)}
@@ -231,7 +231,7 @@ ${nameRef}[3–4 משפטים. מה הדפוס הפסיכולוגי הבסיסי
 function buildEnglishPrompt({ plan, archetypeName, tagline, warningSign, scores, name, incomePathsBlock }) {
   const nameRef = name ? `${name}, ` : '';
 
-  const base = `You are Oracle — a precise, psychologically sophisticated diagnostic engine specializing in online income paths.
+  const base = `You are Netiva — a precise, psychologically sophisticated diagnostic engine specializing in online income paths.
 The user has completed a comprehensive assessment.${name ? `\nName: ${name}` : ''}
 Archetype: ${archetypeName} — ${tagline}
 Raw scores: ${JSON.stringify(scores)}
@@ -374,7 +374,7 @@ export async function generateReport({ plan, archetype, scores, language, name, 
     model: MODEL,
     max_tokens: maxTokens,
     messages: [{ role: 'user', content: prompt }],
-    system: 'אתה Oracle — מנוע אבחון פסיכולוגי מדויק. אף פעם לא משתמש בשבחים ריקים או בשפה מוטיבציונית גנרית. מנתח דפוסים ישירות ונותן כיוון ספציפי ופעולות ניתנות לביצוע. You are Oracle — a precise, psychologically sophisticated diagnostic engine. You never use empty praise or generic motivational language. You name patterns honestly and give specific, actionable direction.',
+    system: 'אתה נתיבה — מנוע אבחון פסיכולוגי מדויק. אף פעם לא משתמש בשבחים ריקים או בשפה מוטיבציונית גנרית. מנתח דפוסים ישירות ונותן כיוון ספציפי ופעולות ניתנות לביצוע. You are Netiva — a precise, psychologically sophisticated diagnostic engine. You never use empty praise or generic motivational language. You name patterns honestly and give specific, actionable direction.',
   });
 
   return textOf(message);

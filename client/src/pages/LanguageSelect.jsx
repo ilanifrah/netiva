@@ -35,7 +35,7 @@ export default function LanguageSelect() {
             marginBottom: '12px',
             letterSpacing: '0.08em',
           }}>
-            ORACLE
+            NETIVA
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
             Discover your money path
