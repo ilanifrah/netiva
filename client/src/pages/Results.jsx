@@ -25,11 +25,11 @@ function fireAnalytics({ archetypeKey, scores, language, answers, name, email, p
     const date = `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()}`;
     const time = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
-    const startRaw = localStorage.getItem('oracle_quiz_start');
+    const startRaw = localStorage.getItem('netiva_quiz_start');
     const completionMinutes = startRaw
       ? Math.round((Date.now() - parseInt(startRaw, 10)) / 60000)
       : null;
-    localStorage.removeItem('oracle_quiz_start');
+    localStorage.removeItem('netiva_quiz_start');
 
     const archetypeName = ARCHETYPES[archetypeKey]?.he?.name ?? archetypeKey;
     const heScores = Object.fromEntries(

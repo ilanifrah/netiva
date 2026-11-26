@@ -9,7 +9,7 @@ function renderResults(scores, container) {
 
       '<div class="archetype-header">',
         '<span class="archetype-icon">' + a.icon + '</span>',
-        '<span class="badge badge-gold" style="margin-bottom:var(--space-3)">Your Oracle Archetype</span>',
+        '<span class="badge badge-gold" style="margin-bottom:var(--space-3)">Your Netiva Archetype</span>',
         '<h2 class="archetype-title">' + a.name + '</h2>',
         '<p class="archetype-tagline">' + a.tagline + '</p>',
       '</div>',
@@ -64,7 +64,7 @@ function renderResults(scores, container) {
           'Want to explore further? Retake the assessment or share your archetype.',
         '</p>',
         '<div style="display:flex;gap:var(--space-3);justify-content:center;flex-wrap:wrap">',
-          '<button class="btn btn-primary" id="btn-retake">Retake the Oracle</button>',
+          '<button class="btn btn-primary" id="btn-retake">Retake Netiva</button>',
           '<button class="btn btn-secondary" id="btn-share">Share My Archetype</button>',
         '</div>',
       '</div>',

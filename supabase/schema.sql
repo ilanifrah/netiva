@@ -1,4 +1,4 @@
--- Oracle project database schema
+-- Netiva project database schema
 -- Run in Supabase SQL editor
 
 create extension if not exists "pgcrypto";

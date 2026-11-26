@@ -102,7 +102,7 @@ function bindResultsActions(quiz) {
   if (btnShare) {
     btnShare.addEventListener('click', function() {
       if (navigator.share) {
-        navigator.share({ title: 'My Oracle Archetype', url: window.location.href });
+        navigator.share({ title: 'My Netiva Archetype', url: window.location.href });
       } else if (navigator.clipboard) {
         navigator.clipboard.writeText(window.location.href).then(function() {
           alert('Link copied to clipboard!');

@@ -814,7 +814,7 @@ const children = [];
 // Title
 children.push(
   new Paragraph({
-    children: [new TextRun({ text: 'Oracle — Diagnostic Questions', bold: true, size: 40, color: '1a0e35' })],
+    children: [new TextRun({ text: 'Netiva — Diagnostic Questions', bold: true, size: 40, color: '1a0e35' })],
     spacing: { after: 120 },
   }),
   new Paragraph({
@@ -903,7 +903,7 @@ const doc = new Document({
   },
 });
 
-const outputPath = join(__dirname, 'Oracle_Diagnostic_Questions.docx');
+const outputPath = join(__dirname, 'Netiva_Diagnostic_Questions.docx');
 const buffer = await Packer.toBuffer(doc);
 writeFileSync(outputPath, buffer);
 console.log(`\n✅  Saved: ${outputPath}\n    ${questions.length} questions across ${Object.keys(STAGE_LABELS).length} stages\n`);

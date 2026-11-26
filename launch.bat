@@ -1,5 +1,5 @@
 @echo off
-REM Opens Oracle in a specific browser.
+REM Opens Netiva in a specific browser.
 REM Edit the path below to point to YOUR browser executable.
 
 REM ── Option 1: Google Chrome (default profile) ──

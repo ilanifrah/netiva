@@ -39,8 +39,8 @@ export default function Quiz() {
 
   // Stamp quiz start time for analytics
   useEffect(() => {
-    if (!localStorage.getItem('oracle_quiz_start')) {
-      localStorage.setItem('oracle_quiz_start', Date.now().toString());
+    if (!localStorage.getItem('netiva_quiz_start')) {
+      localStorage.setItem('netiva_quiz_start', Date.now().toString());
     }
   }, []);
 
